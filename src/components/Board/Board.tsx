@@ -122,18 +122,26 @@ function isLegalMove(x: number, y: number) {
 export default function Board() {
     let board = [];
     for (let j = verticalAxis.length - 1; j >= 0; j--) {
-        for (let i = 0; i < horizontalAxis.length; i++) {
-            const number = i + j + 2 ;
-            let image = undefined;
-            pieces.forEach((p) => {
-                if (p.x === i && p.y === j) {
-                    image = p.image;
-                }
-            });
-            let key = j.toString() + i.toString(); // i,
-            board.push(<Tile key = {key} image={image} number={number} />);
-        }
+      for (let i = 0; i < horizontalAxis.length; i++) {
+        const number = i + j + 2;
+        let image = undefined;
+        pieces.forEach((p) => {
+          if (p.x === i && p.y === j) {
+            image = p.image;
+          }
+        });
+        let key = j.toString() + i.toString();
+        board.push(
+          <Tile
+            key={key}
+            image={image}
+            number={number}
+            rank={horizontalAxis[i]}
+            file={verticalAxis[j]}
+          />
+        );
+      }
     }
-    
-    return <div onMouseDown = {e => grabPiece(e)} id = "board">{board}</div>;
-}
+  
+    return <div onMouseDown={e => grabPiece(e)} id="board">{board}</div>;
+  }

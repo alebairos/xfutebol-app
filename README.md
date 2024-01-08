@@ -44,3 +44,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Backlog
+[x] Mark squares with respective ranks and files.
+[] Design pieces for the xfutebol piece types.
+[] Design a ball.
+[] Change the color of the special areas: goal squares, center of the field, penalty area, goal area, middle line.
+[] Mark the squares with bonus points. For instance, shooting from the penalty are is +25. From the goal area, +15.+5 from the remaining squares of ranks. The bonua pointa should be attached to the upper right corner of a tile.
+[] the ball should snap to the lower right corner of a tile when the piece is the owner. It the tile does not have a piece, the ball shoulf snap to the center of the tile.
+[] 

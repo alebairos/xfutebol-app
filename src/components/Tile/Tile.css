@@ -2,7 +2,7 @@
     width: 100px;
     height: 100px; 
     display: grid;
-    place-content: center;
+    place-content: baseline;
 }
 
 .black-tile {
@@ -10,7 +10,7 @@
 }
 
 .white-tile {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(115, 174, 127);
 }
 
 .tile img {
@@ -23,7 +23,7 @@
     height: 100px;
     background-repeat: no-repeat;
     background-size: 80px;
-    background-position: center;
+    background-position: top;
 }
 
 .tile .board-piece:hover {
@@ -32,4 +32,13 @@
 
 .tile .board-piece:active {
     cursor: grabbing;    
+}
+
+.rank-file {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    color: white;
+    font-style: bold;
+    padding: 2px;
 }
