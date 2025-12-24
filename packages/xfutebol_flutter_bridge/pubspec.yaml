@@ -1,0 +1,22 @@
+name: xfutebol_flutter_bridge
+description: Flutter bindings for the Xfutebol game engine
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_rust_bridge: ^2.0.0
+  ffi: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  ffigen: ^8.0.0
+  integration_test:
+    sdk: flutter
+

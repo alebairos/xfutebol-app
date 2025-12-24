@@ -1,0 +1,19 @@
+[package]
+name = "xfutebol_flutter_bridge"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.11.1"
+
+# Reference the game engine from sibling directory
+# Path: packages/xfutebol_flutter_bridge/rust/ -> ../../../../xfutebol-engine
+xfutebol-engine = { path = "../../../../xfutebol-engine" }
+
+[profile.release]
+lto = true
+opt-level = "z"
+strip = true
