@@ -1,0 +1,10 @@
+# flutter_rust_bridge configuration for xfutebol_flutter_bridge package
+# Run: flutter_rust_bridge_codegen generate
+
+rust_input: crate::api
+dart_output: lib/src/rust/
+rust_root: rust/
+dart_entrypoint_class_name: XfutebolBridge
+
+# Full dependency mode for complete code generation
+full_dep: true
