@@ -70,33 +70,109 @@ class XfutebolBridge
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1234028629;
+  int get rustContentHash => -1553868706;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
-        stem: 'xfutebol_flutter_bridge',
+        stem: 'rust_lib_xfutebol_flutter_bridge',
         ioDirectory: 'rust/target/release/',
         webPrefix: 'pkg/',
       );
 }
 
 abstract class XfutebolBridgeApi extends BaseApi {
+  Future<bool> crateApiDeleteGame({required String gameId});
+
+  Future<ActionResult> crateApiExecuteDefend({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  });
+
+  Future<ActionResult> crateApiExecuteIntercept({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  });
+
+  Future<ActionResult> crateApiExecuteKick({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  });
+
   Future<ActionResult> crateApiExecuteMove({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
     required Position to,
   });
 
-  Future<BoardView> crateApiGetBoard({required String gameId});
+  Future<ActionResult> crateApiExecutePass({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  });
 
-  Future<(int, Position)?> crateApiGetBotMove({
+  Future<ActionResult> crateApiExecutePush({
+    required String gameId,
+    required String pieceId,
+    required Position target,
+    required Position destination,
+  });
+
+  Future<ActionResult> crateApiExecuteShoot({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  });
+
+  Future<bool> crateApiGameExists({required String gameId});
+
+  Future<BoardView?> crateApiGetBoard({required String gameId});
+
+  Future<BotAction?> crateApiGetBotAction({
     required String gameId,
     required Difficulty difficulty,
   });
 
+  Future<(String, Position)?> crateApiGetBotMove({
+    required String gameId,
+    required Difficulty difficulty,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalDefends({
+    required String gameId,
+    required String pieceId,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalIntercepts({
+    required String gameId,
+    required String pieceId,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalKicks({
+    required String gameId,
+    required String pieceId,
+  });
+
   Future<List<Position>> crateApiGetLegalMoves({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalPasses({
+    required String gameId,
+    required String pieceId,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalPushes({
+    required String gameId,
+    required String pieceId,
+  });
+
+  Future<List<PositionPath>> crateApiGetLegalShoots({
+    required String gameId,
+    required String pieceId,
   });
 
   Future<Team?> crateApiGetWinner({required String gameId});
@@ -118,16 +194,133 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   });
 
   @override
+  Future<bool> crateApiDeleteGame({required String gameId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          return wire.wire__crate__api__delete_game(port_, arg0);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiDeleteGameConstMeta,
+        argValues: [gameId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiDeleteGameConstMeta =>
+      const TaskConstMeta(debugName: "delete_game", argNames: ["gameId"]);
+
+  @override
+  Future<ActionResult> crateApiExecuteDefend({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_list_position(path);
+          return wire.wire__crate__api__execute_defend(port_, arg0, arg1, arg2);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecuteDefendConstMeta,
+        argValues: [gameId, pieceId, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecuteDefendConstMeta => const TaskConstMeta(
+    debugName: "execute_defend",
+    argNames: ["gameId", "pieceId", "path"],
+  );
+
+  @override
+  Future<ActionResult> crateApiExecuteIntercept({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_list_position(path);
+          return wire.wire__crate__api__execute_intercept(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecuteInterceptConstMeta,
+        argValues: [gameId, pieceId, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecuteInterceptConstMeta => const TaskConstMeta(
+    debugName: "execute_intercept",
+    argNames: ["gameId", "pieceId", "path"],
+  );
+
+  @override
+  Future<ActionResult> crateApiExecuteKick({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_list_position(path);
+          return wire.wire__crate__api__execute_kick(port_, arg0, arg1, arg2);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecuteKickConstMeta,
+        argValues: [gameId, pieceId, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecuteKickConstMeta => const TaskConstMeta(
+    debugName: "execute_kick",
+    argNames: ["gameId", "pieceId", "path"],
+  );
+
+  @override
   Future<ActionResult> crateApiExecuteMove({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
     required Position to,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_String(gameId);
-          var arg1 = cst_encode_u_8(pieceId);
+          var arg1 = cst_encode_String(pieceId);
           var arg2 = cst_encode_box_autoadd_position(to);
           return wire.wire__crate__api__execute_move(port_, arg0, arg1, arg2);
         },
@@ -148,7 +341,127 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   );
 
   @override
-  Future<BoardView> crateApiGetBoard({required String gameId}) {
+  Future<ActionResult> crateApiExecutePass({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_list_position(path);
+          return wire.wire__crate__api__execute_pass(port_, arg0, arg1, arg2);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecutePassConstMeta,
+        argValues: [gameId, pieceId, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecutePassConstMeta => const TaskConstMeta(
+    debugName: "execute_pass",
+    argNames: ["gameId", "pieceId", "path"],
+  );
+
+  @override
+  Future<ActionResult> crateApiExecutePush({
+    required String gameId,
+    required String pieceId,
+    required Position target,
+    required Position destination,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_box_autoadd_position(target);
+          var arg3 = cst_encode_box_autoadd_position(destination);
+          return wire.wire__crate__api__execute_push(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecutePushConstMeta,
+        argValues: [gameId, pieceId, target, destination],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecutePushConstMeta => const TaskConstMeta(
+    debugName: "execute_push",
+    argNames: ["gameId", "pieceId", "target", "destination"],
+  );
+
+  @override
+  Future<ActionResult> crateApiExecuteShoot({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          var arg2 = cst_encode_list_position(path);
+          return wire.wire__crate__api__execute_shoot(port_, arg0, arg1, arg2);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_action_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiExecuteShootConstMeta,
+        argValues: [gameId, pieceId, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiExecuteShootConstMeta => const TaskConstMeta(
+    debugName: "execute_shoot",
+    argNames: ["gameId", "pieceId", "path"],
+  );
+
+  @override
+  Future<bool> crateApiGameExists({required String gameId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          return wire.wire__crate__api__game_exists(port_, arg0);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGameExistsConstMeta,
+        argValues: [gameId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGameExistsConstMeta =>
+      const TaskConstMeta(debugName: "game_exists", argNames: ["gameId"]);
+
+  @override
+  Future<BoardView?> crateApiGetBoard({required String gameId}) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -156,7 +469,7 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
           return wire.wire__crate__api__get_board(port_, arg0);
         },
         codec: DcoCodec(
-          decodeSuccessData: dco_decode_board_view,
+          decodeSuccessData: dco_decode_opt_box_autoadd_board_view,
           decodeErrorData: null,
         ),
         constMeta: kCrateApiGetBoardConstMeta,
@@ -170,7 +483,35 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
       const TaskConstMeta(debugName: "get_board", argNames: ["gameId"]);
 
   @override
-  Future<(int, Position)?> crateApiGetBotMove({
+  Future<BotAction?> crateApiGetBotAction({
+    required String gameId,
+    required Difficulty difficulty,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_difficulty(difficulty);
+          return wire.wire__crate__api__get_bot_action(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_box_autoadd_bot_action,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetBotActionConstMeta,
+        argValues: [gameId, difficulty],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetBotActionConstMeta => const TaskConstMeta(
+    debugName: "get_bot_action",
+    argNames: ["gameId", "difficulty"],
+  );
+
+  @override
+  Future<(String, Position)?> crateApiGetBotMove({
     required String gameId,
     required Difficulty difficulty,
   }) {
@@ -182,7 +523,7 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
           return wire.wire__crate__api__get_bot_move(port_, arg0, arg1);
         },
         codec: DcoCodec(
-          decodeSuccessData: dco_decode_opt_box_autoadd_record_u_8_position,
+          decodeSuccessData: dco_decode_opt_box_autoadd_record_string_position,
           decodeErrorData: null,
         ),
         constMeta: kCrateApiGetBotMoveConstMeta,
@@ -198,15 +539,99 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   );
 
   @override
-  Future<List<Position>> crateApiGetLegalMoves({
+  Future<List<PositionPath>> crateApiGetLegalDefends({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_String(gameId);
-          var arg1 = cst_encode_u_8(pieceId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_defends(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalDefendsConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalDefendsConstMeta => const TaskConstMeta(
+    debugName: "get_legal_defends",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalIntercepts({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_intercepts(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalInterceptsConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalInterceptsConstMeta => const TaskConstMeta(
+    debugName: "get_legal_intercepts",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalKicks({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_kicks(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalKicksConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalKicksConstMeta => const TaskConstMeta(
+    debugName: "get_legal_kicks",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<Position>> crateApiGetLegalMoves({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
           return wire.wire__crate__api__get_legal_moves(port_, arg0, arg1);
         },
         codec: DcoCodec(
@@ -222,6 +647,90 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
 
   TaskConstMeta get kCrateApiGetLegalMovesConstMeta => const TaskConstMeta(
     debugName: "get_legal_moves",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalPasses({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_passes(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalPassesConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalPassesConstMeta => const TaskConstMeta(
+    debugName: "get_legal_passes",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalPushes({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_pushes(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalPushesConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalPushesConstMeta => const TaskConstMeta(
+    debugName: "get_legal_pushes",
+    argNames: ["gameId", "pieceId"],
+  );
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalShoots({
+    required String gameId,
+    required String pieceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(gameId);
+          var arg1 = cst_encode_String(pieceId);
+          return wire.wire__crate__api__get_legal_shoots(port_, arg0, arg1);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_position_path,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiGetLegalShootsConstMeta,
+        argValues: [gameId, pieceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiGetLegalShootsConstMeta => const TaskConstMeta(
+    debugName: "get_legal_shoots",
     argNames: ["gameId", "pieceId"],
   );
 
@@ -323,14 +832,21 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   ActionResult dco_decode_action_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return ActionResult(
       success: dco_decode_bool(arr[0]),
       message: dco_decode_String(arr[1]),
       gameOver: dco_decode_bool(arr[2]),
       winner: dco_decode_opt_box_autoadd_team(arr[3]),
+      actionsRemaining: dco_decode_u_8(arr[4]),
     );
+  }
+
+  @protected
+  ActionType dco_decode_action_type(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ActionType.values[raw as int];
   }
 
   @protected
@@ -357,15 +873,42 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  BotAction dco_decode_bot_action(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return BotAction(
+      pieceId: dco_decode_String(arr[0]),
+      actionType: dco_decode_action_type(arr[1]),
+      path: dco_decode_list_position(arr[2]),
+    );
+  }
+
+  @protected
+  BoardView dco_decode_box_autoadd_board_view(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_board_view(raw);
+  }
+
+  @protected
+  BotAction dco_decode_box_autoadd_bot_action(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_bot_action(raw);
+  }
+
+  @protected
   Position dco_decode_box_autoadd_position(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_position(raw);
   }
 
   @protected
-  (int, Position) dco_decode_box_autoadd_record_u_8_position(dynamic raw) {
+  (String, Position) dco_decode_box_autoadd_record_string_position(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as (int, Position);
+    return raw as (String, Position);
   }
 
   @protected
@@ -405,9 +948,27 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  List<PositionPath> dco_decode_list_position_path(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_position_path).toList();
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  BoardView? dco_decode_opt_box_autoadd_board_view(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_board_view(raw);
+  }
+
+  @protected
+  BotAction? dco_decode_opt_box_autoadd_bot_action(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_bot_action(raw);
   }
 
   @protected
@@ -417,9 +978,13 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  (int, Position)? dco_decode_opt_box_autoadd_record_u_8_position(dynamic raw) {
+  (String, Position)? dco_decode_opt_box_autoadd_record_string_position(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_record_u_8_position(raw);
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_record_string_position(raw);
   }
 
   @protected
@@ -441,7 +1006,7 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     if (arr.length != 5)
       throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return PieceView(
-      id: dco_decode_u_8(arr[0]),
+      id: dco_decode_String(arr[0]),
       team: dco_decode_team(arr[1]),
       role: dco_decode_piece_role(arr[2]),
       position: dco_decode_position(arr[3]),
@@ -459,13 +1024,22 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  (int, Position) dco_decode_record_u_8_position(dynamic raw) {
+  PositionPath dco_decode_position_path(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return PositionPath(positions: dco_decode_list_position(arr[0]));
+  }
+
+  @protected
+  (String, Position) dco_decode_record_string_position(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 2) {
       throw Exception('Expected 2 elements, got ${arr.length}');
     }
-    return (dco_decode_u_8(arr[0]), dco_decode_position(arr[1]));
+    return (dco_decode_String(arr[0]), dco_decode_position(arr[1]));
   }
 
   @protected
@@ -506,12 +1080,21 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     var var_message = sse_decode_String(deserializer);
     var var_gameOver = sse_decode_bool(deserializer);
     var var_winner = sse_decode_opt_box_autoadd_team(deserializer);
+    var var_actionsRemaining = sse_decode_u_8(deserializer);
     return ActionResult(
       success: var_success,
       message: var_message,
       gameOver: var_gameOver,
       winner: var_winner,
+      actionsRemaining: var_actionsRemaining,
     );
+  }
+
+  @protected
+  ActionType sse_decode_action_type(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return ActionType.values[inner];
   }
 
   @protected
@@ -542,17 +1125,42 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  BotAction sse_decode_bot_action(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_pieceId = sse_decode_String(deserializer);
+    var var_actionType = sse_decode_action_type(deserializer);
+    var var_path = sse_decode_list_position(deserializer);
+    return BotAction(
+      pieceId: var_pieceId,
+      actionType: var_actionType,
+      path: var_path,
+    );
+  }
+
+  @protected
+  BoardView sse_decode_box_autoadd_board_view(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_board_view(deserializer));
+  }
+
+  @protected
+  BotAction sse_decode_box_autoadd_bot_action(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_bot_action(deserializer));
+  }
+
+  @protected
   Position sse_decode_box_autoadd_position(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_position(deserializer));
   }
 
   @protected
-  (int, Position) sse_decode_box_autoadd_record_u_8_position(
+  (String, Position) sse_decode_box_autoadd_record_string_position(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_record_u_8_position(deserializer));
+    return (sse_decode_record_string_position(deserializer));
   }
 
   @protected
@@ -606,10 +1214,50 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  List<PositionPath> sse_decode_list_position_path(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <PositionPath>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_position_path(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  BoardView? sse_decode_opt_box_autoadd_board_view(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_board_view(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  BotAction? sse_decode_opt_box_autoadd_bot_action(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_bot_action(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -624,13 +1272,13 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  (int, Position)? sse_decode_opt_box_autoadd_record_u_8_position(
+  (String, Position)? sse_decode_opt_box_autoadd_record_string_position(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_record_u_8_position(deserializer));
+      return (sse_decode_box_autoadd_record_string_position(deserializer));
     } else {
       return null;
     }
@@ -657,7 +1305,7 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   @protected
   PieceView sse_decode_piece_view(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_id = sse_decode_u_8(deserializer);
+    var var_id = sse_decode_String(deserializer);
     var var_team = sse_decode_team(deserializer);
     var var_role = sse_decode_piece_role(deserializer);
     var var_position = sse_decode_position(deserializer);
@@ -680,9 +1328,18 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  (int, Position) sse_decode_record_u_8_position(SseDeserializer deserializer) {
+  PositionPath sse_decode_position_path(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_u_8(deserializer);
+    var var_positions = sse_decode_list_position(deserializer);
+    return PositionPath(positions: var_positions);
+  }
+
+  @protected
+  (String, Position) sse_decode_record_string_position(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_String(deserializer);
     var var_field1 = sse_decode_position(deserializer);
     return (var_field0, var_field1);
   }
@@ -709,6 +1366,12 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   @protected
   void sse_decode_unit(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  int cst_encode_action_type(ActionType raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_i_32(raw.index);
   }
 
   @protected
@@ -778,6 +1441,13 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     sse_encode_String(self.message, serializer);
     sse_encode_bool(self.gameOver, serializer);
     sse_encode_opt_box_autoadd_team(self.winner, serializer);
+    sse_encode_u_8(self.actionsRemaining, serializer);
+  }
+
+  @protected
+  void sse_encode_action_type(ActionType self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected
@@ -799,6 +1469,32 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  void sse_encode_bot_action(BotAction self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.pieceId, serializer);
+    sse_encode_action_type(self.actionType, serializer);
+    sse_encode_list_position(self.path, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_board_view(
+    BoardView self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_board_view(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_bot_action(
+    BotAction self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_bot_action(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_position(
     Position self,
     SseSerializer serializer,
@@ -808,12 +1504,12 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  void sse_encode_box_autoadd_record_u_8_position(
-    (int, Position) self,
+  void sse_encode_box_autoadd_record_string_position(
+    (String, Position) self,
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_record_u_8_position(self, serializer);
+    sse_encode_record_string_position(self, serializer);
   }
 
   @protected
@@ -862,6 +1558,18 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  void sse_encode_list_position_path(
+    List<PositionPath> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_position_path(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -869,6 +1577,32 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_board_view(
+    BoardView? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_board_view(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_bot_action(
+    BotAction? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_bot_action(self, serializer);
+    }
   }
 
   @protected
@@ -885,15 +1619,15 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_record_u_8_position(
-    (int, Position)? self,
+  void sse_encode_opt_box_autoadd_record_string_position(
+    (String, Position)? self,
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
-      sse_encode_box_autoadd_record_u_8_position(self, serializer);
+      sse_encode_box_autoadd_record_string_position(self, serializer);
     }
   }
 
@@ -916,7 +1650,7 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   @protected
   void sse_encode_piece_view(PieceView self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_u_8(self.id, serializer);
+    sse_encode_String(self.id, serializer);
     sse_encode_team(self.team, serializer);
     sse_encode_piece_role(self.role, serializer);
     sse_encode_position(self.position, serializer);
@@ -931,12 +1665,18 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  void sse_encode_record_u_8_position(
-    (int, Position) self,
+  void sse_encode_position_path(PositionPath self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_position(self.positions, serializer);
+  }
+
+  @protected
+  void sse_encode_record_string_position(
+    (String, Position) self,
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_u_8(self.$1, serializer);
+    sse_encode_String(self.$1, serializer);
     sse_encode_position(self.$2, serializer);
   }
 

@@ -16,7 +16,7 @@
 ///   // Now you can use the API functions
 /// }
 /// ```
-library xfutebol_flutter_bridge;
+library;
 
 // Export generated Rust bindings
 export 'src/rust/api.dart';

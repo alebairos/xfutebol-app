@@ -6,21 +6,76 @@
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
+// These functions are ignored because they are not marked as `pub`: `error`, `execute_path_action`, `from_outcome`, `get_legal_action_paths`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`
 
 /// Create a new game with the specified mode
 Future<String> newGame({required GameModeType mode}) =>
     XfutebolBridge.instance.api.crateApiNewGame(mode: mode);
 
 /// Get the current board state for display
-Future<BoardView> getBoard({required String gameId}) =>
+Future<BoardView?> getBoard({required String gameId}) =>
     XfutebolBridge.instance.api.crateApiGetBoard(gameId: gameId);
 
 /// Get legal moves for a specific piece
 Future<List<Position>> getLegalMoves({
   required String gameId,
-  required int pieceId,
+  required String pieceId,
 }) => XfutebolBridge.instance.api.crateApiGetLegalMoves(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal pass paths for a piece (must have ball)
+Future<List<PositionPath>> getLegalPasses({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalPasses(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal shoot paths for a piece (must have ball)
+Future<List<PositionPath>> getLegalShoots({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalShoots(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal intercept paths for a piece
+Future<List<PositionPath>> getLegalIntercepts({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalIntercepts(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal kick paths for a piece (must have ball)
+Future<List<PositionPath>> getLegalKicks({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalKicks(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal defend paths for a piece
+Future<List<PositionPath>> getLegalDefends({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalDefends(
+  gameId: gameId,
+  pieceId: pieceId,
+);
+
+/// Get legal push targets for a piece (adjacent opponents that can be pushed)
+Future<List<PositionPath>> getLegalPushes({
+  required String gameId,
+  required String pieceId,
+}) => XfutebolBridge.instance.api.crateApiGetLegalPushes(
   gameId: gameId,
   pieceId: pieceId,
 );
@@ -28,7 +83,7 @@ Future<List<Position>> getLegalMoves({
 /// Execute a move action
 Future<ActionResult> executeMove({
   required String gameId,
-  required int pieceId,
+  required String pieceId,
   required Position to,
 }) => XfutebolBridge.instance.api.crateApiExecuteMove(
   gameId: gameId,
@@ -36,11 +91,88 @@ Future<ActionResult> executeMove({
   to: to,
 );
 
-/// Get the bot's move for the current position
-Future<(int, Position)?> getBotMove({
+/// Execute a pass action
+Future<ActionResult> executePass({
+  required String gameId,
+  required String pieceId,
+  required List<Position> path,
+}) => XfutebolBridge.instance.api.crateApiExecutePass(
+  gameId: gameId,
+  pieceId: pieceId,
+  path: path,
+);
+
+/// Execute a shoot action
+Future<ActionResult> executeShoot({
+  required String gameId,
+  required String pieceId,
+  required List<Position> path,
+}) => XfutebolBridge.instance.api.crateApiExecuteShoot(
+  gameId: gameId,
+  pieceId: pieceId,
+  path: path,
+);
+
+/// Execute an intercept action
+Future<ActionResult> executeIntercept({
+  required String gameId,
+  required String pieceId,
+  required List<Position> path,
+}) => XfutebolBridge.instance.api.crateApiExecuteIntercept(
+  gameId: gameId,
+  pieceId: pieceId,
+  path: path,
+);
+
+/// Execute a kick action (clear the ball)
+Future<ActionResult> executeKick({
+  required String gameId,
+  required String pieceId,
+  required List<Position> path,
+}) => XfutebolBridge.instance.api.crateApiExecuteKick(
+  gameId: gameId,
+  pieceId: pieceId,
+  path: path,
+);
+
+/// Execute a defend action (defensive positioning)
+Future<ActionResult> executeDefend({
+  required String gameId,
+  required String pieceId,
+  required List<Position> path,
+}) => XfutebolBridge.instance.api.crateApiExecuteDefend(
+  gameId: gameId,
+  pieceId: pieceId,
+  path: path,
+);
+
+/// Execute a push action (push adjacent opponent)
+Future<ActionResult> executePush({
+  required String gameId,
+  required String pieceId,
+  required Position target,
+  required Position destination,
+}) => XfutebolBridge.instance.api.crateApiExecutePush(
+  gameId: gameId,
+  pieceId: pieceId,
+  target: target,
+  destination: destination,
+);
+
+/// Get the bot's move for the current position (deprecated: use get_bot_action)
+Future<(String, Position)?> getBotMove({
   required String gameId,
   required Difficulty difficulty,
 }) => XfutebolBridge.instance.api.crateApiGetBotMove(
+  gameId: gameId,
+  difficulty: difficulty,
+);
+
+/// Get the bot's recommended action with full details
+Future<BotAction?> getBotAction({
+  required String gameId,
+  required Difficulty difficulty,
+}) => XfutebolBridge.instance.api.crateApiGetBotAction(
   gameId: gameId,
   difficulty: difficulty,
 );
@@ -53,6 +185,14 @@ Future<bool> isGameOver({required String gameId}) =>
 Future<Team?> getWinner({required String gameId}) =>
     XfutebolBridge.instance.api.crateApiGetWinner(gameId: gameId);
 
+/// Check if a game exists
+Future<bool> gameExists({required String gameId}) =>
+    XfutebolBridge.instance.api.crateApiGameExists(gameId: gameId);
+
+/// Delete a game session and free memory
+Future<bool> deleteGame({required String gameId}) =>
+    XfutebolBridge.instance.api.crateApiDeleteGame(gameId: gameId);
+
 /// Simple test function to verify bridge works
 Future<String> greet({required String name}) =>
     XfutebolBridge.instance.api.crateApiGreet(name: name);
@@ -63,17 +203,23 @@ class ActionResult {
   final String message;
   final bool gameOver;
   final Team? winner;
+  final int actionsRemaining;
 
   const ActionResult({
     required this.success,
     required this.message,
     required this.gameOver,
     this.winner,
+    required this.actionsRemaining,
   });
 
   @override
   int get hashCode =>
-      success.hashCode ^ message.hashCode ^ gameOver.hashCode ^ winner.hashCode;
+      success.hashCode ^
+      message.hashCode ^
+      gameOver.hashCode ^
+      winner.hashCode ^
+      actionsRemaining.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -83,8 +229,12 @@ class ActionResult {
           success == other.success &&
           message == other.message &&
           gameOver == other.gameOver &&
-          winner == other.winner;
+          winner == other.winner &&
+          actionsRemaining == other.actionsRemaining;
 }
+
+/// Action types available in the game
+enum ActionType { move, pass, shoot, intercept, kick, defend, push }
 
 /// Current state of the board for display
 class BoardView {
@@ -130,8 +280,33 @@ class BoardView {
           turnNumber == other.turnNumber;
 }
 
+/// A complete action returned by the bot AI
+class BotAction {
+  final String pieceId;
+  final ActionType actionType;
+  final List<Position> path;
+
+  const BotAction({
+    required this.pieceId,
+    required this.actionType,
+    required this.path,
+  });
+
+  @override
+  int get hashCode => pieceId.hashCode ^ actionType.hashCode ^ path.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BotAction &&
+          runtimeType == other.runtimeType &&
+          pieceId == other.pieceId &&
+          actionType == other.actionType &&
+          path == other.path;
+}
+
 /// Game difficulty levels
-enum Difficulty { easy, medium, hard }
+enum Difficulty { easy, medium }
 
 /// Game mode options
 enum GameModeType { quickMatch, standardMatch, goldenGoal }
@@ -141,7 +316,7 @@ enum PieceRole { goalkeeper, defender, midfielder, attacker }
 
 /// A piece on the board
 class PieceView {
-  final int id;
+  final String id;
   final Team team;
   final PieceRole role;
   final Position position;
@@ -192,6 +367,23 @@ class Position {
           runtimeType == other.runtimeType &&
           row == other.row &&
           col == other.col;
+}
+
+/// A path of positions (wrapper to avoid nested Vec issues in codegen)
+class PositionPath {
+  final List<Position> positions;
+
+  const PositionPath({required this.positions});
+
+  @override
+  int get hashCode => positions.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PositionPath &&
+          runtimeType == other.runtimeType &&
+          positions == other.positions;
 }
 
 /// Team colors

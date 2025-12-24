@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1234028629;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1553868706;
 
 // Section: executor
 
@@ -45,10 +45,118 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire__crate__api__delete_game_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "delete_game",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::delete_game(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__execute_defend_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    path: impl CstDecode<Vec<crate::api::Position>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_defend",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_path = path.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_defend(
+                        api_game_id,
+                        api_piece_id,
+                        api_path,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__execute_intercept_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    path: impl CstDecode<Vec<crate::api::Position>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_intercept",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_path = path.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_intercept(
+                        api_game_id,
+                        api_piece_id,
+                        api_path,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__execute_kick_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    path: impl CstDecode<Vec<crate::api::Position>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_kick",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_path = path.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_kick(
+                        api_game_id,
+                        api_piece_id,
+                        api_path,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__execute_move_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     game_id: impl CstDecode<String>,
-    piece_id: impl CstDecode<u8>,
+    piece_id: impl CstDecode<String>,
     to: impl CstDecode<crate::api::Position>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -74,6 +182,117 @@ fn wire__crate__api__execute_move_impl(
         },
     )
 }
+fn wire__crate__api__execute_pass_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    path: impl CstDecode<Vec<crate::api::Position>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_pass",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_path = path.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_pass(
+                        api_game_id,
+                        api_piece_id,
+                        api_path,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__execute_push_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    target: impl CstDecode<crate::api::Position>,
+    destination: impl CstDecode<crate::api::Position>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_push",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_target = target.cst_decode();
+            let api_destination = destination.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_push(
+                        api_game_id,
+                        api_piece_id,
+                        api_target,
+                        api_destination,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__execute_shoot_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+    path: impl CstDecode<Vec<crate::api::Position>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute_shoot",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            let api_path = path.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::execute_shoot(
+                        api_game_id,
+                        api_piece_id,
+                        api_path,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__game_exists_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "game_exists",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::game_exists(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__get_board_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     game_id: impl CstDecode<String>,
@@ -89,6 +308,32 @@ fn wire__crate__api__get_board_impl(
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(crate::api::get_board(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_bot_action_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    difficulty: impl CstDecode<crate::api::Difficulty>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_bot_action",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_difficulty = difficulty.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_bot_action(
+                        api_game_id,
+                        api_difficulty,
+                    ))?;
                     Ok(output_ok)
                 })())
             }
@@ -119,10 +364,88 @@ fn wire__crate__api__get_bot_move_impl(
         },
     )
 }
+fn wire__crate__api__get_legal_defends_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_defends",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_defends(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_legal_intercepts_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_intercepts",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_intercepts(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_legal_kicks_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_kicks",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_kicks(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__get_legal_moves_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     game_id: impl CstDecode<String>,
-    piece_id: impl CstDecode<u8>,
+    piece_id: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -136,6 +459,84 @@ fn wire__crate__api__get_legal_moves_impl(
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_moves(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_legal_passes_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_passes",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_passes(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_legal_pushes_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_pushes",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_pushes(
+                        api_game_id,
+                        api_piece_id,
+                    ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_legal_shoots_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    piece_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_legal_shoots",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_piece_id = piece_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_legal_shoots(
                         api_game_id,
                         api_piece_id,
                     ))?;
@@ -232,6 +633,21 @@ fn wire__crate__api__new_game_impl(
 
 // Section: dart2rust
 
+impl CstDecode<crate::api::ActionType> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::ActionType {
+        match self {
+            0 => crate::api::ActionType::Move,
+            1 => crate::api::ActionType::Pass,
+            2 => crate::api::ActionType::Shoot,
+            3 => crate::api::ActionType::Intercept,
+            4 => crate::api::ActionType::Kick,
+            5 => crate::api::ActionType::Defend,
+            6 => crate::api::ActionType::Push,
+            _ => unreachable!("Invalid variant for ActionType: {}", self),
+        }
+    }
+}
 impl CstDecode<bool> for bool {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> bool {
@@ -244,7 +660,6 @@ impl CstDecode<crate::api::Difficulty> for i32 {
         match self {
             0 => crate::api::Difficulty::Easy,
             1 => crate::api::Difficulty::Medium,
-            2 => crate::api::Difficulty::Hard,
             _ => unreachable!("Invalid variant for Difficulty: {}", self),
         }
     }
@@ -315,11 +730,30 @@ impl SseDecode for crate::api::ActionResult {
         let mut var_message = <String>::sse_decode(deserializer);
         let mut var_gameOver = <bool>::sse_decode(deserializer);
         let mut var_winner = <Option<crate::api::Team>>::sse_decode(deserializer);
+        let mut var_actionsRemaining = <u8>::sse_decode(deserializer);
         return crate::api::ActionResult {
             success: var_success,
             message: var_message,
             game_over: var_gameOver,
             winner: var_winner,
+            actions_remaining: var_actionsRemaining,
+        };
+    }
+}
+
+impl SseDecode for crate::api::ActionType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::ActionType::Move,
+            1 => crate::api::ActionType::Pass,
+            2 => crate::api::ActionType::Shoot,
+            3 => crate::api::ActionType::Intercept,
+            4 => crate::api::ActionType::Kick,
+            5 => crate::api::ActionType::Defend,
+            6 => crate::api::ActionType::Push,
+            _ => unreachable!("Invalid variant for ActionType: {}", inner),
         };
     }
 }
@@ -353,6 +787,20 @@ impl SseDecode for bool {
     }
 }
 
+impl SseDecode for crate::api::BotAction {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_pieceId = <String>::sse_decode(deserializer);
+        let mut var_actionType = <crate::api::ActionType>::sse_decode(deserializer);
+        let mut var_path = <Vec<crate::api::Position>>::sse_decode(deserializer);
+        return crate::api::BotAction {
+            piece_id: var_pieceId,
+            action_type: var_actionType,
+            path: var_path,
+        };
+    }
+}
+
 impl SseDecode for crate::api::Difficulty {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -360,7 +808,6 @@ impl SseDecode for crate::api::Difficulty {
         return match inner {
             0 => crate::api::Difficulty::Easy,
             1 => crate::api::Difficulty::Medium,
-            2 => crate::api::Difficulty::Hard,
             _ => unreachable!("Invalid variant for Difficulty: {}", inner),
         };
     }
@@ -410,6 +857,18 @@ impl SseDecode for Vec<crate::api::Position> {
     }
 }
 
+impl SseDecode for Vec<crate::api::PositionPath> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::PositionPath>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<u8> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -419,6 +878,28 @@ impl SseDecode for Vec<u8> {
             ans_.push(<u8>::sse_decode(deserializer));
         }
         return ans_;
+    }
+}
+
+impl SseDecode for Option<crate::api::BoardView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::BoardView>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::BotAction> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::BotAction>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
     }
 }
 
@@ -433,11 +914,11 @@ impl SseDecode for Option<crate::api::Position> {
     }
 }
 
-impl SseDecode for Option<(u8, crate::api::Position)> {
+impl SseDecode for Option<(String, crate::api::Position)> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<(u8, crate::api::Position)>::sse_decode(deserializer));
+            return Some(<(String, crate::api::Position)>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -472,7 +953,7 @@ impl SseDecode for crate::api::PieceRole {
 impl SseDecode for crate::api::PieceView {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_id = <u8>::sse_decode(deserializer);
+        let mut var_id = <String>::sse_decode(deserializer);
         let mut var_team = <crate::api::Team>::sse_decode(deserializer);
         let mut var_role = <crate::api::PieceRole>::sse_decode(deserializer);
         let mut var_position = <crate::api::Position>::sse_decode(deserializer);
@@ -499,10 +980,20 @@ impl SseDecode for crate::api::Position {
     }
 }
 
-impl SseDecode for (u8, crate::api::Position) {
+impl SseDecode for crate::api::PositionPath {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_field0 = <u8>::sse_decode(deserializer);
+        let mut var_positions = <Vec<crate::api::Position>>::sse_decode(deserializer);
+        return crate::api::PositionPath {
+            positions: var_positions,
+        };
+    }
+}
+
+impl SseDecode for (String, crate::api::Position) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
         let mut var_field1 = <crate::api::Position>::sse_decode(deserializer);
         return (var_field0, var_field1);
     }
@@ -574,6 +1065,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::ActionResult {
             self.message.into_into_dart().into_dart(),
             self.game_over.into_into_dart().into_dart(),
             self.winner.into_into_dart().into_dart(),
+            self.actions_remaining.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -581,6 +1073,27 @@ impl flutter_rust_bridge::IntoDart for crate::api::ActionResult {
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::ActionResult {}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::ActionResult> for crate::api::ActionResult {
     fn into_into_dart(self) -> crate::api::ActionResult {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::ActionType {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Move => 0.into_dart(),
+            Self::Pass => 1.into_dart(),
+            Self::Shoot => 2.into_dart(),
+            Self::Intercept => 3.into_dart(),
+            Self::Kick => 4.into_dart(),
+            Self::Defend => 5.into_dart(),
+            Self::Push => 6.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::ActionType {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::ActionType> for crate::api::ActionType {
+    fn into_into_dart(self) -> crate::api::ActionType {
         self
     }
 }
@@ -606,12 +1119,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::BoardView> for crate::api::Bo
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::BotAction {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.piece_id.into_into_dart().into_dart(),
+            self.action_type.into_into_dart().into_dart(),
+            self.path.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::BotAction {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::BotAction> for crate::api::BotAction {
+    fn into_into_dart(self) -> crate::api::BotAction {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::Difficulty {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
             Self::Easy => 0.into_dart(),
             Self::Medium => 1.into_dart(),
-            Self::Hard => 2.into_dart(),
             _ => unreachable!(),
         }
     }
@@ -693,6 +1222,18 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::Position> for crate::api::Pos
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::PositionPath {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.positions.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::PositionPath {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::PositionPath> for crate::api::PositionPath {
+    fn into_into_dart(self) -> crate::api::PositionPath {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::Team {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -723,6 +1264,28 @@ impl SseEncode for crate::api::ActionResult {
         <String>::sse_encode(self.message, serializer);
         <bool>::sse_encode(self.game_over, serializer);
         <Option<crate::api::Team>>::sse_encode(self.winner, serializer);
+        <u8>::sse_encode(self.actions_remaining, serializer);
+    }
+}
+
+impl SseEncode for crate::api::ActionType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::ActionType::Move => 0,
+                crate::api::ActionType::Pass => 1,
+                crate::api::ActionType::Shoot => 2,
+                crate::api::ActionType::Intercept => 3,
+                crate::api::ActionType::Kick => 4,
+                crate::api::ActionType::Defend => 5,
+                crate::api::ActionType::Push => 6,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 
@@ -746,6 +1309,15 @@ impl SseEncode for bool {
     }
 }
 
+impl SseEncode for crate::api::BotAction {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.piece_id, serializer);
+        <crate::api::ActionType>::sse_encode(self.action_type, serializer);
+        <Vec<crate::api::Position>>::sse_encode(self.path, serializer);
+    }
+}
+
 impl SseEncode for crate::api::Difficulty {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -753,7 +1325,6 @@ impl SseEncode for crate::api::Difficulty {
             match self {
                 crate::api::Difficulty::Easy => 0,
                 crate::api::Difficulty::Medium => 1,
-                crate::api::Difficulty::Hard => 2,
                 _ => {
                     unimplemented!("");
                 }
@@ -807,12 +1378,42 @@ impl SseEncode for Vec<crate::api::Position> {
     }
 }
 
+impl SseEncode for Vec<crate::api::PositionPath> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::PositionPath>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<u8> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::BoardView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::BoardView>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::BotAction> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::BotAction>::sse_encode(value, serializer);
         }
     }
 }
@@ -827,12 +1428,12 @@ impl SseEncode for Option<crate::api::Position> {
     }
 }
 
-impl SseEncode for Option<(u8, crate::api::Position)> {
+impl SseEncode for Option<(String, crate::api::Position)> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
-            <(u8, crate::api::Position)>::sse_encode(value, serializer);
+            <(String, crate::api::Position)>::sse_encode(value, serializer);
         }
     }
 }
@@ -868,7 +1469,7 @@ impl SseEncode for crate::api::PieceRole {
 impl SseEncode for crate::api::PieceView {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <u8>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.id, serializer);
         <crate::api::Team>::sse_encode(self.team, serializer);
         <crate::api::PieceRole>::sse_encode(self.role, serializer);
         <crate::api::Position>::sse_encode(self.position, serializer);
@@ -884,10 +1485,17 @@ impl SseEncode for crate::api::Position {
     }
 }
 
-impl SseEncode for (u8, crate::api::Position) {
+impl SseEncode for crate::api::PositionPath {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <u8>::sse_encode(self.0, serializer);
+        <Vec<crate::api::Position>>::sse_encode(self.positions, serializer);
+    }
+}
+
+impl SseEncode for (String, crate::api::Position) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
         <crate::api::Position>::sse_encode(self.1, serializer);
     }
 }
@@ -962,6 +1570,7 @@ mod io {
                 message: self.message.cst_decode(),
                 game_over: self.game_over.cst_decode(),
                 winner: self.winner.cst_decode(),
+                actions_remaining: self.actions_remaining.cst_decode(),
             }
         }
     }
@@ -979,6 +1588,30 @@ mod io {
             }
         }
     }
+    impl CstDecode<crate::api::BotAction> for wire_cst_bot_action {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::BotAction {
+            crate::api::BotAction {
+                piece_id: self.piece_id.cst_decode(),
+                action_type: self.action_type.cst_decode(),
+                path: self.path.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::BoardView> for *mut wire_cst_board_view {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::BoardView {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::BoardView>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<crate::api::BotAction> for *mut wire_cst_bot_action {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::BotAction {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::BotAction>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::Position> for *mut wire_cst_position {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::Position {
@@ -986,11 +1619,11 @@ mod io {
             CstDecode::<crate::api::Position>::cst_decode(*wrap).into()
         }
     }
-    impl CstDecode<(u8, crate::api::Position)> for *mut wire_cst_record_u_8_position {
+    impl CstDecode<(String, crate::api::Position)> for *mut wire_cst_record_string_position {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> (u8, crate::api::Position) {
+        fn cst_decode(self) -> (String, crate::api::Position) {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-            CstDecode::<(u8, crate::api::Position)>::cst_decode(*wrap).into()
+            CstDecode::<(String, crate::api::Position)>::cst_decode(*wrap).into()
         }
     }
     impl CstDecode<crate::api::Team> for *mut i32 {
@@ -1013,6 +1646,16 @@ mod io {
     impl CstDecode<Vec<crate::api::Position>> for *mut wire_cst_list_position {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> Vec<crate::api::Position> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
+    impl CstDecode<Vec<crate::api::PositionPath>> for *mut wire_cst_list_position_path {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::PositionPath> {
             let vec = unsafe {
                 let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
                 flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
@@ -1050,9 +1693,17 @@ mod io {
             }
         }
     }
-    impl CstDecode<(u8, crate::api::Position)> for wire_cst_record_u_8_position {
+    impl CstDecode<crate::api::PositionPath> for wire_cst_position_path {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> (u8, crate::api::Position) {
+        fn cst_decode(self) -> crate::api::PositionPath {
+            crate::api::PositionPath {
+                positions: self.positions.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<(String, crate::api::Position)> for wire_cst_record_string_position {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> (String, crate::api::Position) {
             (self.field0.cst_decode(), self.field1.cst_decode())
         }
     }
@@ -1063,6 +1714,7 @@ mod io {
                 message: core::ptr::null_mut(),
                 game_over: Default::default(),
                 winner: core::ptr::null_mut(),
+                actions_remaining: Default::default(),
             }
         }
     }
@@ -1089,10 +1741,24 @@ mod io {
             Self::new_with_null_ptr()
         }
     }
+    impl NewWithNullPtr for wire_cst_bot_action {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                piece_id: core::ptr::null_mut(),
+                action_type: Default::default(),
+                path: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_bot_action {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
     impl NewWithNullPtr for wire_cst_piece_view {
         fn new_with_null_ptr() -> Self {
             Self {
-                id: Default::default(),
+                id: core::ptr::null_mut(),
                 team: Default::default(),
                 role: Default::default(),
                 position: Default::default(),
@@ -1118,28 +1784,117 @@ mod io {
             Self::new_with_null_ptr()
         }
     }
-    impl NewWithNullPtr for wire_cst_record_u_8_position {
+    impl NewWithNullPtr for wire_cst_position_path {
         fn new_with_null_ptr() -> Self {
             Self {
-                field0: Default::default(),
+                positions: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_position_path {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_record_string_position {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                field0: core::ptr::null_mut(),
                 field1: Default::default(),
             }
         }
     }
-    impl Default for wire_cst_record_u_8_position {
+    impl Default for wire_cst_record_string_position {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__delete_game(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__delete_game_impl(port_, game_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_defend(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        path: *mut wire_cst_list_position,
+    ) {
+        wire__crate__api__execute_defend_impl(port_, game_id, piece_id, path)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_intercept(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        path: *mut wire_cst_list_position,
+    ) {
+        wire__crate__api__execute_intercept_impl(port_, game_id, piece_id, path)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_kick(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        path: *mut wire_cst_list_position,
+    ) {
+        wire__crate__api__execute_kick_impl(port_, game_id, piece_id, path)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_move(
         port_: i64,
         game_id: *mut wire_cst_list_prim_u_8_strict,
-        piece_id: u8,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
         to: *mut wire_cst_position,
     ) {
         wire__crate__api__execute_move_impl(port_, game_id, piece_id, to)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_pass(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        path: *mut wire_cst_list_position,
+    ) {
+        wire__crate__api__execute_pass_impl(port_, game_id, piece_id, path)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_push(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        target: *mut wire_cst_position,
+        destination: *mut wire_cst_position,
+    ) {
+        wire__crate__api__execute_push_impl(port_, game_id, piece_id, target, destination)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_shoot(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        path: *mut wire_cst_list_position,
+    ) {
+        wire__crate__api__execute_shoot_impl(port_, game_id, piece_id, path)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__game_exists(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__game_exists_impl(port_, game_id)
     }
 
     #[unsafe(no_mangle)]
@@ -1148,6 +1903,15 @@ mod io {
         game_id: *mut wire_cst_list_prim_u_8_strict,
     ) {
         wire__crate__api__get_board_impl(port_, game_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_bot_action(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        difficulty: i32,
+    ) {
+        wire__crate__api__get_bot_action_impl(port_, game_id, difficulty)
     }
 
     #[unsafe(no_mangle)]
@@ -1160,12 +1924,66 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_defends(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_defends_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_intercepts(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_intercepts_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_kicks(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_kicks_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_moves(
         port_: i64,
         game_id: *mut wire_cst_list_prim_u_8_strict,
-        piece_id: u8,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
     ) {
         wire__crate__api__get_legal_moves_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_passes(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_passes_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_pushes(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_pushes_impl(port_, game_id, piece_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_shoots(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_legal_shoots_impl(port_, game_id, piece_id)
     }
 
     #[unsafe(no_mangle)]
@@ -1201,16 +2019,32 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_board_view(
+    ) -> *mut wire_cst_board_view {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_board_view::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_bot_action(
+    ) -> *mut wire_cst_bot_action {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_bot_action::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_position(
     ) -> *mut wire_cst_position {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_position::new_with_null_ptr())
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_record_u_8_position(
-    ) -> *mut wire_cst_record_u_8_position {
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_record_string_position(
+    ) -> *mut wire_cst_record_string_position {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(
-            wire_cst_record_u_8_position::new_with_null_ptr(),
+            wire_cst_record_string_position::new_with_null_ptr(),
         )
     }
 
@@ -1250,6 +2084,20 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_list_position_path(
+        len: i32,
+    ) -> *mut wire_cst_list_position_path {
+        let wrap = wire_cst_list_position_path {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_position_path>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_list_prim_u_8_strict(
         len: i32,
     ) -> *mut wire_cst_list_prim_u_8_strict {
@@ -1267,6 +2115,7 @@ mod io {
         message: *mut wire_cst_list_prim_u_8_strict,
         game_over: bool,
         winner: *mut i32,
+        actions_remaining: u8,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -1278,6 +2127,13 @@ mod io {
         white_score: u8,
         black_score: u8,
         turn_number: u32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_bot_action {
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        action_type: i32,
+        path: *mut wire_cst_list_position,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -1293,6 +2149,12 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_list_position_path {
+        ptr: *mut wire_cst_position_path,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_list_prim_u_8_strict {
         ptr: *mut u8,
         len: i32,
@@ -1300,7 +2162,7 @@ mod io {
     #[repr(C)]
     #[derive(Clone, Copy)]
     pub struct wire_cst_piece_view {
-        id: u8,
+        id: *mut wire_cst_list_prim_u_8_strict,
         team: i32,
         role: i32,
         position: wire_cst_position,
@@ -1314,8 +2176,13 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
-    pub struct wire_cst_record_u_8_position {
-        field0: u8,
+    pub struct wire_cst_position_path {
+        positions: *mut wire_cst_list_position,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_record_string_position {
+        field0: *mut wire_cst_list_prim_u_8_strict,
         field1: wire_cst_position,
     }
 }
@@ -1361,8 +2228,8 @@ mod web {
                 .unwrap();
             assert_eq!(
                 self_.length(),
-                4,
-                "Expected 4 elements, got {}",
+                5,
+                "Expected 5 elements, got {}",
                 self_.length()
             );
             crate::api::ActionResult {
@@ -1370,6 +2237,7 @@ mod web {
                 message: self_.get(1).cst_decode(),
                 game_over: self_.get(2).cst_decode(),
                 winner: self_.get(3).cst_decode(),
+                actions_remaining: self_.get(4).cst_decode(),
             }
         }
     }
@@ -1398,6 +2266,27 @@ mod web {
             }
         }
     }
+    impl CstDecode<crate::api::BotAction>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::BotAction {
+            let self_ = self
+                .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap();
+            assert_eq!(
+                self_.length(),
+                3,
+                "Expected 3 elements, got {}",
+                self_.length()
+            );
+            crate::api::BotAction {
+                piece_id: self_.get(0).cst_decode(),
+                action_type: self_.get(1).cst_decode(),
+                path: self_.get(2).cst_decode(),
+            }
+        }
+    }
     impl CstDecode<Vec<crate::api::PieceView>>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
@@ -1415,6 +2304,18 @@ mod web {
     {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> Vec<crate::api::Position> {
+            self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap()
+                .iter()
+                .map(CstDecode::cst_decode)
+                .collect()
+        }
+    }
+    impl CstDecode<Vec<crate::api::PositionPath>>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::PositionPath> {
             self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
                 .unwrap()
                 .iter()
@@ -1469,11 +2370,30 @@ mod web {
             }
         }
     }
-    impl CstDecode<(u8, crate::api::Position)>
+    impl CstDecode<crate::api::PositionPath>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> (u8, crate::api::Position) {
+        fn cst_decode(self) -> crate::api::PositionPath {
+            let self_ = self
+                .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap();
+            assert_eq!(
+                self_.length(),
+                1,
+                "Expected 1 elements, got {}",
+                self_.length()
+            );
+            crate::api::PositionPath {
+                positions: self_.get(0).cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<(String, crate::api::Position)>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> (String, crate::api::Position) {
             let self_ = self
                 .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
                 .unwrap();
@@ -1490,6 +2410,14 @@ mod web {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> String {
             self.as_string().expect("non-UTF-8 string, or not a string")
+        }
+    }
+    impl CstDecode<crate::api::ActionType>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::ActionType {
+            (self.unchecked_into_f64() as i32).cst_decode()
         }
     }
     impl CstDecode<bool> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
@@ -1556,13 +2484,90 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__delete_game(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+    ) {
+        wire__crate__api__delete_game_impl(port_, game_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_defend(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        path: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_defend_impl(port_, game_id, piece_id, path)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_intercept(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        path: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_intercept_impl(port_, game_id, piece_id, path)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_kick(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        path: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_kick_impl(port_, game_id, piece_id, path)
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__execute_move(
         port_: flutter_rust_bridge::for_generated::MessagePort,
         game_id: String,
-        piece_id: u8,
+        piece_id: String,
         to: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     ) {
         wire__crate__api__execute_move_impl(port_, game_id, piece_id, to)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_pass(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        path: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_pass_impl(port_, game_id, piece_id, path)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_push(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        target: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        destination: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_push_impl(port_, game_id, piece_id, target, destination)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__execute_shoot(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+        path: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__execute_shoot_impl(port_, game_id, piece_id, path)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__game_exists(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+    ) {
+        wire__crate__api__game_exists_impl(port_, game_id)
     }
 
     #[wasm_bindgen]
@@ -1571,6 +2576,15 @@ mod web {
         game_id: String,
     ) {
         wire__crate__api__get_board_impl(port_, game_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_bot_action(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        difficulty: i32,
+    ) {
+        wire__crate__api__get_bot_action_impl(port_, game_id, difficulty)
     }
 
     #[wasm_bindgen]
@@ -1583,12 +2597,66 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_defends(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_defends_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_intercepts(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_intercepts_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_kicks(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_kicks_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__get_legal_moves(
         port_: flutter_rust_bridge::for_generated::MessagePort,
         game_id: String,
-        piece_id: u8,
+        piece_id: String,
     ) {
         wire__crate__api__get_legal_moves_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_passes(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_passes_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_pushes(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_pushes_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_legal_shoots(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        piece_id: String,
+    ) {
+        wire__crate__api__get_legal_shoots_impl(port_, game_id, piece_id)
     }
 
     #[wasm_bindgen]

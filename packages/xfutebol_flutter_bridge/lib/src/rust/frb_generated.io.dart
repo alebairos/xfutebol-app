@@ -26,16 +26,28 @@ abstract class XfutebolBridgeApiImplPlatform
   ActionResult dco_decode_action_result(dynamic raw);
 
   @protected
+  ActionType dco_decode_action_type(dynamic raw);
+
+  @protected
   BoardView dco_decode_board_view(dynamic raw);
 
   @protected
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  BotAction dco_decode_bot_action(dynamic raw);
+
+  @protected
+  BoardView dco_decode_box_autoadd_board_view(dynamic raw);
+
+  @protected
+  BotAction dco_decode_box_autoadd_bot_action(dynamic raw);
+
+  @protected
   Position dco_decode_box_autoadd_position(dynamic raw);
 
   @protected
-  (int, Position) dco_decode_box_autoadd_record_u_8_position(dynamic raw);
+  (String, Position) dco_decode_box_autoadd_record_string_position(dynamic raw);
 
   @protected
   Team dco_decode_box_autoadd_team(dynamic raw);
@@ -56,13 +68,24 @@ abstract class XfutebolBridgeApiImplPlatform
   List<Position> dco_decode_list_position(dynamic raw);
 
   @protected
+  List<PositionPath> dco_decode_list_position_path(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  BoardView? dco_decode_opt_box_autoadd_board_view(dynamic raw);
+
+  @protected
+  BotAction? dco_decode_opt_box_autoadd_bot_action(dynamic raw);
 
   @protected
   Position? dco_decode_opt_box_autoadd_position(dynamic raw);
 
   @protected
-  (int, Position)? dco_decode_opt_box_autoadd_record_u_8_position(dynamic raw);
+  (String, Position)? dco_decode_opt_box_autoadd_record_string_position(
+    dynamic raw,
+  );
 
   @protected
   Team? dco_decode_opt_box_autoadd_team(dynamic raw);
@@ -77,7 +100,10 @@ abstract class XfutebolBridgeApiImplPlatform
   Position dco_decode_position(dynamic raw);
 
   @protected
-  (int, Position) dco_decode_record_u_8_position(dynamic raw);
+  PositionPath dco_decode_position_path(dynamic raw);
+
+  @protected
+  (String, Position) dco_decode_record_string_position(dynamic raw);
 
   @protected
   Team dco_decode_team(dynamic raw);
@@ -98,16 +124,28 @@ abstract class XfutebolBridgeApiImplPlatform
   ActionResult sse_decode_action_result(SseDeserializer deserializer);
 
   @protected
+  ActionType sse_decode_action_type(SseDeserializer deserializer);
+
+  @protected
   BoardView sse_decode_board_view(SseDeserializer deserializer);
 
   @protected
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  BotAction sse_decode_bot_action(SseDeserializer deserializer);
+
+  @protected
+  BoardView sse_decode_box_autoadd_board_view(SseDeserializer deserializer);
+
+  @protected
+  BotAction sse_decode_box_autoadd_bot_action(SseDeserializer deserializer);
+
+  @protected
   Position sse_decode_box_autoadd_position(SseDeserializer deserializer);
 
   @protected
-  (int, Position) sse_decode_box_autoadd_record_u_8_position(
+  (String, Position) sse_decode_box_autoadd_record_string_position(
     SseDeserializer deserializer,
   );
 
@@ -130,13 +168,28 @@ abstract class XfutebolBridgeApiImplPlatform
   List<Position> sse_decode_list_position(SseDeserializer deserializer);
 
   @protected
+  List<PositionPath> sse_decode_list_position_path(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  BoardView? sse_decode_opt_box_autoadd_board_view(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  BotAction? sse_decode_opt_box_autoadd_bot_action(
+    SseDeserializer deserializer,
+  );
 
   @protected
   Position? sse_decode_opt_box_autoadd_position(SseDeserializer deserializer);
 
   @protected
-  (int, Position)? sse_decode_opt_box_autoadd_record_u_8_position(
+  (String, Position)? sse_decode_opt_box_autoadd_record_string_position(
     SseDeserializer deserializer,
   );
 
@@ -153,7 +206,12 @@ abstract class XfutebolBridgeApiImplPlatform
   Position sse_decode_position(SseDeserializer deserializer);
 
   @protected
-  (int, Position) sse_decode_record_u_8_position(SseDeserializer deserializer);
+  PositionPath sse_decode_position_path(SseDeserializer deserializer);
+
+  @protected
+  (String, Position) sse_decode_record_string_position(
+    SseDeserializer deserializer,
+  );
 
   @protected
   Team sse_decode_team(SseDeserializer deserializer);
@@ -174,6 +232,26 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  ffi.Pointer<wire_cst_board_view> cst_encode_box_autoadd_board_view(
+    BoardView raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_board_view();
+    cst_api_fill_to_wire_board_view(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_bot_action> cst_encode_box_autoadd_bot_action(
+    BotAction raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_bot_action();
+    cst_api_fill_to_wire_bot_action(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_position> cst_encode_box_autoadd_position(Position raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     final ptr = wire.cst_new_box_autoadd_position();
@@ -182,11 +260,11 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  ffi.Pointer<wire_cst_record_u_8_position>
-  cst_encode_box_autoadd_record_u_8_position((int, Position) raw) {
+  ffi.Pointer<wire_cst_record_string_position>
+  cst_encode_box_autoadd_record_string_position((String, Position) raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    final ptr = wire.cst_new_box_autoadd_record_u_8_position();
-    cst_api_fill_to_wire_record_u_8_position(raw, ptr.ref);
+    final ptr = wire.cst_new_box_autoadd_record_string_position();
+    cst_api_fill_to_wire_record_string_position(raw, ptr.ref);
     return ptr;
   }
 
@@ -221,6 +299,18 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  ffi.Pointer<wire_cst_list_position_path> cst_encode_list_position_path(
+    List<PositionPath> raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ans = wire.cst_new_list_position_path(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      cst_api_fill_to_wire_position_path(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_list_prim_u_8_strict(
     Uint8List raw,
   ) {
@@ -228,6 +318,22 @@ abstract class XfutebolBridgeApiImplPlatform
     final ans = wire.cst_new_list_prim_u_8_strict(raw.length);
     ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
     return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_board_view> cst_encode_opt_box_autoadd_board_view(
+    BoardView? raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null ? ffi.nullptr : cst_encode_box_autoadd_board_view(raw);
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_bot_action> cst_encode_opt_box_autoadd_bot_action(
+    BotAction? raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null ? ffi.nullptr : cst_encode_box_autoadd_bot_action(raw);
   }
 
   @protected
@@ -239,12 +345,12 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  ffi.Pointer<wire_cst_record_u_8_position>
-  cst_encode_opt_box_autoadd_record_u_8_position((int, Position)? raw) {
+  ffi.Pointer<wire_cst_record_string_position>
+  cst_encode_opt_box_autoadd_record_string_position((String, Position)? raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw == null
         ? ffi.nullptr
-        : cst_encode_box_autoadd_record_u_8_position(raw);
+        : cst_encode_box_autoadd_record_string_position(raw);
   }
 
   @protected
@@ -262,6 +368,7 @@ abstract class XfutebolBridgeApiImplPlatform
     wireObj.message = cst_encode_String(apiObj.message);
     wireObj.game_over = cst_encode_bool(apiObj.gameOver);
     wireObj.winner = cst_encode_opt_box_autoadd_team(apiObj.winner);
+    wireObj.actions_remaining = cst_encode_u_8(apiObj.actionsRemaining);
   }
 
   @protected
@@ -281,6 +388,32 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  void cst_api_fill_to_wire_bot_action(
+    BotAction apiObj,
+    wire_cst_bot_action wireObj,
+  ) {
+    wireObj.piece_id = cst_encode_String(apiObj.pieceId);
+    wireObj.action_type = cst_encode_action_type(apiObj.actionType);
+    wireObj.path = cst_encode_list_position(apiObj.path);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_board_view(
+    BoardView apiObj,
+    ffi.Pointer<wire_cst_board_view> wireObj,
+  ) {
+    cst_api_fill_to_wire_board_view(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_bot_action(
+    BotAction apiObj,
+    ffi.Pointer<wire_cst_bot_action> wireObj,
+  ) {
+    cst_api_fill_to_wire_bot_action(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_position(
     Position apiObj,
     ffi.Pointer<wire_cst_position> wireObj,
@@ -289,11 +422,11 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  void cst_api_fill_to_wire_box_autoadd_record_u_8_position(
-    (int, Position) apiObj,
-    ffi.Pointer<wire_cst_record_u_8_position> wireObj,
+  void cst_api_fill_to_wire_box_autoadd_record_string_position(
+    (String, Position) apiObj,
+    ffi.Pointer<wire_cst_record_string_position> wireObj,
   ) {
-    cst_api_fill_to_wire_record_u_8_position(apiObj, wireObj.ref);
+    cst_api_fill_to_wire_record_string_position(apiObj, wireObj.ref);
   }
 
   @protected
@@ -301,7 +434,7 @@ abstract class XfutebolBridgeApiImplPlatform
     PieceView apiObj,
     wire_cst_piece_view wireObj,
   ) {
-    wireObj.id = cst_encode_u_8(apiObj.id);
+    wireObj.id = cst_encode_String(apiObj.id);
     wireObj.team = cst_encode_team(apiObj.team);
     wireObj.role = cst_encode_piece_role(apiObj.role);
     cst_api_fill_to_wire_position(apiObj.position, wireObj.position);
@@ -318,13 +451,24 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
-  void cst_api_fill_to_wire_record_u_8_position(
-    (int, Position) apiObj,
-    wire_cst_record_u_8_position wireObj,
+  void cst_api_fill_to_wire_position_path(
+    PositionPath apiObj,
+    wire_cst_position_path wireObj,
   ) {
-    wireObj.field0 = cst_encode_u_8(apiObj.$1);
+    wireObj.positions = cst_encode_list_position(apiObj.positions);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_record_string_position(
+    (String, Position) apiObj,
+    wire_cst_record_string_position wireObj,
+  ) {
+    wireObj.field0 = cst_encode_String(apiObj.$1);
     cst_api_fill_to_wire_position(apiObj.$2, wireObj.field1);
   }
+
+  @protected
+  int cst_encode_action_type(ActionType raw);
 
   @protected
   bool cst_encode_bool(bool raw);
@@ -360,17 +504,35 @@ abstract class XfutebolBridgeApiImplPlatform
   void sse_encode_action_result(ActionResult self, SseSerializer serializer);
 
   @protected
+  void sse_encode_action_type(ActionType self, SseSerializer serializer);
+
+  @protected
   void sse_encode_board_view(BoardView self, SseSerializer serializer);
 
   @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_bot_action(BotAction self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_board_view(
+    BoardView self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_box_autoadd_bot_action(
+    BotAction self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_box_autoadd_position(Position self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_record_u_8_position(
-    (int, Position) self,
+  void sse_encode_box_autoadd_record_string_position(
+    (String, Position) self,
     SseSerializer serializer,
   );
 
@@ -396,8 +558,26 @@ abstract class XfutebolBridgeApiImplPlatform
   void sse_encode_list_position(List<Position> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_position_path(
+    List<PositionPath> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_opt_box_autoadd_board_view(
+    BoardView? self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_opt_box_autoadd_bot_action(
+    BotAction? self,
     SseSerializer serializer,
   );
 
@@ -408,8 +588,8 @@ abstract class XfutebolBridgeApiImplPlatform
   );
 
   @protected
-  void sse_encode_opt_box_autoadd_record_u_8_position(
-    (int, Position)? self,
+  void sse_encode_opt_box_autoadd_record_string_position(
+    (String, Position)? self,
     SseSerializer serializer,
   );
 
@@ -426,8 +606,11 @@ abstract class XfutebolBridgeApiImplPlatform
   void sse_encode_position(Position self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_u_8_position(
-    (int, Position) self,
+  void sse_encode_position_path(PositionPath self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_position(
+    (String, Position) self,
     SseSerializer serializer,
   );
 
@@ -481,10 +664,124 @@ class XfutebolBridgeWire implements BaseWire {
   late final _store_dart_post_cobject = _store_dart_post_cobjectPtr
       .asFunction<void Function(DartPostCObjectFnType)>();
 
+  void wire__crate__api__delete_game(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+  ) {
+    return _wire__crate__api__delete_game(port_, game_id);
+  }
+
+  late final _wire__crate__api__delete_gamePtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__delete_game');
+  late final _wire__crate__api__delete_game = _wire__crate__api__delete_gamePtr
+      .asFunction<
+        void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
+      >();
+
+  void wire__crate__api__execute_defend(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_list_position> path,
+  ) {
+    return _wire__crate__api__execute_defend(port_, game_id, piece_id, path);
+  }
+
+  late final _wire__crate__api__execute_defendPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_defend');
+  late final _wire__crate__api__execute_defend =
+      _wire__crate__api__execute_defendPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_position>,
+            )
+          >();
+
+  void wire__crate__api__execute_intercept(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_list_position> path,
+  ) {
+    return _wire__crate__api__execute_intercept(port_, game_id, piece_id, path);
+  }
+
+  late final _wire__crate__api__execute_interceptPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_intercept');
+  late final _wire__crate__api__execute_intercept =
+      _wire__crate__api__execute_interceptPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_position>,
+            )
+          >();
+
+  void wire__crate__api__execute_kick(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_list_position> path,
+  ) {
+    return _wire__crate__api__execute_kick(port_, game_id, piece_id, path);
+  }
+
+  late final _wire__crate__api__execute_kickPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_kick');
+  late final _wire__crate__api__execute_kick =
+      _wire__crate__api__execute_kickPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_position>,
+            )
+          >();
+
   void wire__crate__api__execute_move(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
-    int piece_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
     ffi.Pointer<wire_cst_position> to,
   ) {
     return _wire__crate__api__execute_move(port_, game_id, piece_id, to);
@@ -496,7 +793,7 @@ class XfutebolBridgeWire implements BaseWire {
           ffi.Void Function(
             ffi.Int64,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Uint8,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_position>,
           )
         >
@@ -507,10 +804,133 @@ class XfutebolBridgeWire implements BaseWire {
             void Function(
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_position>,
             )
           >();
+
+  void wire__crate__api__execute_pass(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_list_position> path,
+  ) {
+    return _wire__crate__api__execute_pass(port_, game_id, piece_id, path);
+  }
+
+  late final _wire__crate__api__execute_passPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_pass');
+  late final _wire__crate__api__execute_pass =
+      _wire__crate__api__execute_passPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_position>,
+            )
+          >();
+
+  void wire__crate__api__execute_push(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_position> target,
+    ffi.Pointer<wire_cst_position> destination,
+  ) {
+    return _wire__crate__api__execute_push(
+      port_,
+      game_id,
+      piece_id,
+      target,
+      destination,
+    );
+  }
+
+  late final _wire__crate__api__execute_pushPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_position>,
+            ffi.Pointer<wire_cst_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_push');
+  late final _wire__crate__api__execute_push =
+      _wire__crate__api__execute_pushPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_position>,
+              ffi.Pointer<wire_cst_position>,
+            )
+          >();
+
+  void wire__crate__api__execute_shoot(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+    ffi.Pointer<wire_cst_list_position> path,
+  ) {
+    return _wire__crate__api__execute_shoot(port_, game_id, piece_id, path);
+  }
+
+  late final _wire__crate__api__execute_shootPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_position>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__execute_shoot');
+  late final _wire__crate__api__execute_shoot =
+      _wire__crate__api__execute_shootPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_position>,
+            )
+          >();
+
+  void wire__crate__api__game_exists(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+  ) {
+    return _wire__crate__api__game_exists(port_, game_id);
+  }
+
+  late final _wire__crate__api__game_existsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__game_exists');
+  late final _wire__crate__api__game_exists = _wire__crate__api__game_existsPtr
+      .asFunction<
+        void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
+      >();
 
   void wire__crate__api__get_board(
     int port_,
@@ -532,6 +952,30 @@ class XfutebolBridgeWire implements BaseWire {
       .asFunction<
         void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
       >();
+
+  void wire__crate__api__get_bot_action(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    int difficulty,
+  ) {
+    return _wire__crate__api__get_bot_action(port_, game_id, difficulty);
+  }
+
+  late final _wire__crate__api__get_bot_actionPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Int32,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_bot_action');
+  late final _wire__crate__api__get_bot_action =
+      _wire__crate__api__get_bot_actionPtr
+          .asFunction<
+            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)
+          >();
 
   void wire__crate__api__get_bot_move(
     int port_,
@@ -557,10 +1001,96 @@ class XfutebolBridgeWire implements BaseWire {
             void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)
           >();
 
+  void wire__crate__api__get_legal_defends(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_defends(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_defendsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_defends');
+  late final _wire__crate__api__get_legal_defends =
+      _wire__crate__api__get_legal_defendsPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
+  void wire__crate__api__get_legal_intercepts(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_intercepts(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_interceptsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >(
+        'frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_intercepts',
+      );
+  late final _wire__crate__api__get_legal_intercepts =
+      _wire__crate__api__get_legal_interceptsPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
+  void wire__crate__api__get_legal_kicks(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_kicks(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_kicksPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_kicks');
+  late final _wire__crate__api__get_legal_kicks =
+      _wire__crate__api__get_legal_kicksPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
   void wire__crate__api__get_legal_moves(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
-    int piece_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
   ) {
     return _wire__crate__api__get_legal_moves(port_, game_id, piece_id);
   }
@@ -571,14 +1101,102 @@ class XfutebolBridgeWire implements BaseWire {
           ffi.Void Function(
             ffi.Int64,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Uint8,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           )
         >
       >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_moves');
   late final _wire__crate__api__get_legal_moves =
       _wire__crate__api__get_legal_movesPtr
           .asFunction<
-            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
+  void wire__crate__api__get_legal_passes(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_passes(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_passesPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_passes');
+  late final _wire__crate__api__get_legal_passes =
+      _wire__crate__api__get_legal_passesPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
+  void wire__crate__api__get_legal_pushes(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_pushes(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_pushesPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_pushes');
+  late final _wire__crate__api__get_legal_pushes =
+      _wire__crate__api__get_legal_pushesPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
+          >();
+
+  void wire__crate__api__get_legal_shoots(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id,
+  ) {
+    return _wire__crate__api__get_legal_shoots(port_, game_id, piece_id);
+  }
+
+  late final _wire__crate__api__get_legal_shootsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_legal_shoots');
+  late final _wire__crate__api__get_legal_shoots =
+      _wire__crate__api__get_legal_shootsPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            )
           >();
 
   void wire__crate__api__get_winner(
@@ -656,6 +1274,30 @@ class XfutebolBridgeWire implements BaseWire {
   late final _wire__crate__api__new_game = _wire__crate__api__new_gamePtr
       .asFunction<void Function(int, int)>();
 
+  ffi.Pointer<wire_cst_board_view> cst_new_box_autoadd_board_view() {
+    return _cst_new_box_autoadd_board_view();
+  }
+
+  late final _cst_new_box_autoadd_board_viewPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_cst_board_view> Function()>>(
+        'frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_board_view',
+      );
+  late final _cst_new_box_autoadd_board_view =
+      _cst_new_box_autoadd_board_viewPtr
+          .asFunction<ffi.Pointer<wire_cst_board_view> Function()>();
+
+  ffi.Pointer<wire_cst_bot_action> cst_new_box_autoadd_bot_action() {
+    return _cst_new_box_autoadd_bot_action();
+  }
+
+  late final _cst_new_box_autoadd_bot_actionPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_cst_bot_action> Function()>>(
+        'frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_bot_action',
+      );
+  late final _cst_new_box_autoadd_bot_action =
+      _cst_new_box_autoadd_bot_actionPtr
+          .asFunction<ffi.Pointer<wire_cst_bot_action> Function()>();
+
   ffi.Pointer<wire_cst_position> cst_new_box_autoadd_position() {
     return _cst_new_box_autoadd_position();
   }
@@ -667,20 +1309,24 @@ class XfutebolBridgeWire implements BaseWire {
   late final _cst_new_box_autoadd_position = _cst_new_box_autoadd_positionPtr
       .asFunction<ffi.Pointer<wire_cst_position> Function()>();
 
-  ffi.Pointer<wire_cst_record_u_8_position>
-  cst_new_box_autoadd_record_u_8_position() {
-    return _cst_new_box_autoadd_record_u_8_position();
+  ffi.Pointer<wire_cst_record_string_position>
+  cst_new_box_autoadd_record_string_position() {
+    return _cst_new_box_autoadd_record_string_position();
   }
 
-  late final _cst_new_box_autoadd_record_u_8_positionPtr =
+  late final _cst_new_box_autoadd_record_string_positionPtr =
       _lookup<
-        ffi.NativeFunction<ffi.Pointer<wire_cst_record_u_8_position> Function()>
+        ffi.NativeFunction<
+          ffi.Pointer<wire_cst_record_string_position> Function()
+        >
       >(
-        'frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_record_u_8_position',
+        'frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_record_string_position',
       );
-  late final _cst_new_box_autoadd_record_u_8_position =
-      _cst_new_box_autoadd_record_u_8_positionPtr
-          .asFunction<ffi.Pointer<wire_cst_record_u_8_position> Function()>();
+  late final _cst_new_box_autoadd_record_string_position =
+      _cst_new_box_autoadd_record_string_positionPtr
+          .asFunction<
+            ffi.Pointer<wire_cst_record_string_position> Function()
+          >();
 
   ffi.Pointer<ffi.Int32> cst_new_box_autoadd_team(int value) {
     return _cst_new_box_autoadd_team(value);
@@ -718,6 +1364,19 @@ class XfutebolBridgeWire implements BaseWire {
       >('frbgen_xfutebol_flutter_bridge_cst_new_list_position');
   late final _cst_new_list_position = _cst_new_list_positionPtr
       .asFunction<ffi.Pointer<wire_cst_list_position> Function(int)>();
+
+  ffi.Pointer<wire_cst_list_position_path> cst_new_list_position_path(int len) {
+    return _cst_new_list_position_path(len);
+  }
+
+  late final _cst_new_list_position_pathPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_position_path> Function(ffi.Int32)
+        >
+      >('frbgen_xfutebol_flutter_bridge_cst_new_list_position_path');
+  late final _cst_new_list_position_path = _cst_new_list_position_pathPtr
+      .asFunction<ffi.Pointer<wire_cst_list_position_path> Function(int)>();
 
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_new_list_prim_u_8_strict(
     int len,
@@ -769,16 +1428,15 @@ final class wire_cst_position extends ffi.Struct {
   external int col;
 }
 
-final class wire_cst_record_u_8_position extends ffi.Struct {
-  @ffi.Uint8()
-  external int field0;
+final class wire_cst_list_position extends ffi.Struct {
+  external ffi.Pointer<wire_cst_position> ptr;
 
-  external wire_cst_position field1;
+  @ffi.Int32()
+  external int len;
 }
 
 final class wire_cst_piece_view extends ffi.Struct {
-  @ffi.Uint8()
-  external int id;
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
 
   @ffi.Int32()
   external int team;
@@ -797,25 +1455,6 @@ final class wire_cst_list_piece_view extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
-}
-
-final class wire_cst_list_position extends ffi.Struct {
-  external ffi.Pointer<wire_cst_position> ptr;
-
-  @ffi.Int32()
-  external int len;
-}
-
-final class wire_cst_action_result extends ffi.Struct {
-  @ffi.Bool()
-  external bool success;
-
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> message;
-
-  @ffi.Bool()
-  external bool game_over;
-
-  external ffi.Pointer<ffi.Int32> winner;
 }
 
 final class wire_cst_board_view extends ffi.Struct {
@@ -837,4 +1476,45 @@ final class wire_cst_board_view extends ffi.Struct {
 
   @ffi.Uint32()
   external int turn_number;
+}
+
+final class wire_cst_bot_action extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id;
+
+  @ffi.Int32()
+  external int action_type;
+
+  external ffi.Pointer<wire_cst_list_position> path;
+}
+
+final class wire_cst_record_string_position extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+
+  external wire_cst_position field1;
+}
+
+final class wire_cst_position_path extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_position> positions;
+}
+
+final class wire_cst_list_position_path extends ffi.Struct {
+  external ffi.Pointer<wire_cst_position_path> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
+final class wire_cst_action_result extends ffi.Struct {
+  @ffi.Bool()
+  external bool success;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> message;
+
+  @ffi.Bool()
+  external bool game_over;
+
+  external ffi.Pointer<ffi.Int32> winner;
+
+  @ffi.Uint8()
+  external int actions_remaining;
 }

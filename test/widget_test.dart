@@ -1,30 +1,15 @@
-// This is a basic Flutter widget test.
+// Unit tests for XfutebolApp.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Note: Tests that require the Rust bridge must run as integration tests
+// because the native library cannot be loaded in the Dart VM.
+// See: integration_test/app_test.dart
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:xfutebol_app/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('placeholder unit test', () {
+    // Widget tests that need the Rust bridge should use integration tests.
+    // Run with: flutter test integration_test/app_test.dart -d <device>
+    expect(true, isTrue);
   });
 }

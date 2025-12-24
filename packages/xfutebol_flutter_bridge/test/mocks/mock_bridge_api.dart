@@ -3,13 +3,18 @@ import 'package:xfutebol_flutter_bridge/src/rust/frb_generated.dart';
 
 /// Mock implementation of XfutebolBridgeApi for testing without FFI.
 class MockXfutebolBridgeApi extends XfutebolBridgeApi {
+  final Set<String> _games = {};
+
   @override
   Future<String> crateApiNewGame({required GameModeType mode}) async {
-    return 'mock_game_${mode.name}';
+    final id = 'mock_game_${mode.name}_${_games.length}';
+    _games.add(id);
+    return id;
   }
 
   @override
-  Future<BoardView> crateApiGetBoard({required String gameId}) async {
+  Future<BoardView?> crateApiGetBoard({required String gameId}) async {
+    if (!_games.contains(gameId)) return null;
     return BoardView(
       pieces: _createMockPieces(),
       currentTurn: Team.white,
@@ -23,8 +28,9 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
   @override
   Future<List<Position>> crateApiGetLegalMoves({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
   }) async {
+    if (!_games.contains(gameId)) return [];
     return [
       Position(row: 3, col: 4),
       Position(row: 4, col: 3),
@@ -33,121 +39,380 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
   }
 
   @override
+  Future<List<PositionPath>> crateApiGetLegalPasses({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(
+        positions: [Position(row: 2, col: 2), Position(row: 2, col: 5)],
+      ),
+      PositionPath(positions: [Position(row: 3, col: 4)]),
+    ];
+  }
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalShoots({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(
+        positions: [
+          Position(row: 5, col: 3),
+          Position(row: 6, col: 3),
+          Position(row: 7, col: 3),
+        ],
+      ),
+    ];
+  }
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalIntercepts({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(positions: [Position(row: 4, col: 4)]),
+    ];
+  }
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalKicks({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(
+        positions: [Position(row: 5, col: 3), Position(row: 6, col: 3)],
+      ),
+    ];
+  }
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalDefends({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(positions: [Position(row: 5, col: 4)]),
+    ];
+  }
+
+  @override
+  Future<List<PositionPath>> crateApiGetLegalPushes({
+    required String gameId,
+    required String pieceId,
+  }) async {
+    if (!_games.contains(gameId)) return [];
+    return [
+      PositionPath(
+        positions: [Position(row: 4, col: 4), Position(row: 4, col: 5)],
+      ),
+    ];
+  }
+
+  @override
   Future<ActionResult> crateApiExecuteMove({
     required String gameId,
-    required int pieceId,
+    required String pieceId,
     required Position to,
   }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
     return ActionResult(
       success: true,
       message: 'Mock move executed',
       gameOver: false,
+      actionsRemaining: 1,
     );
   }
 
   @override
-  Future<(int, Position)?> crateApiGetBotMove({
+  Future<ActionResult> crateApiExecutePass({
     required String gameId,
-    required Difficulty difficulty,
+    required String pieceId,
+    required List<Position> path,
   }) async {
-    return (7, Position(row: 5, col: 2));
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock pass executed',
+      gameOver: false,
+      actionsRemaining: 1,
+    );
   }
 
   @override
-  Future<bool> crateApiIsGameOver({required String gameId}) async => false;
+  Future<ActionResult> crateApiExecuteShoot({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock shoot executed',
+      gameOver: false,
+      actionsRemaining: 0,
+    );
+  }
+
+  @override
+  Future<ActionResult> crateApiExecuteIntercept({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock intercept executed',
+      gameOver: false,
+      actionsRemaining: 1,
+    );
+  }
+
+  @override
+  Future<ActionResult> crateApiExecuteKick({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock kick executed',
+      gameOver: false,
+      actionsRemaining: 1,
+    );
+  }
+
+  @override
+  Future<ActionResult> crateApiExecuteDefend({
+    required String gameId,
+    required String pieceId,
+    required List<Position> path,
+  }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock defend executed',
+      gameOver: false,
+      actionsRemaining: 1,
+    );
+  }
+
+  @override
+  Future<ActionResult> crateApiExecutePush({
+    required String gameId,
+    required String pieceId,
+    required Position target,
+    required Position destination,
+  }) async {
+    if (!_games.contains(gameId)) {
+      return ActionResult(
+        success: false,
+        message: 'Game not found',
+        gameOver: false,
+        actionsRemaining: 0,
+      );
+    }
+    return ActionResult(
+      success: true,
+      message: 'Mock push executed',
+      gameOver: false,
+      actionsRemaining: 1,
+    );
+  }
+
+  @override
+  Future<(String, Position)?> crateApiGetBotMove({
+    required String gameId,
+    required Difficulty difficulty,
+  }) async {
+    if (!_games.contains(gameId)) return null;
+    return ('BD01', Position(row: 5, col: 2));
+  }
+
+  @override
+  Future<BotAction?> crateApiGetBotAction({
+    required String gameId,
+    required Difficulty difficulty,
+  }) async {
+    if (!_games.contains(gameId)) return null;
+    return BotAction(
+      pieceId: 'WA01',
+      actionType: ActionType.move,
+      path: [Position(row: 4, col: 3)],
+    );
+  }
+
+  @override
+  Future<bool> crateApiIsGameOver({required String gameId}) async =>
+      !_games.contains(gameId);
 
   @override
   Future<Team?> crateApiGetWinner({required String gameId}) async => null;
+
+  @override
+  Future<bool> crateApiGameExists({required String gameId}) async =>
+      _games.contains(gameId);
+
+  @override
+  Future<bool> crateApiDeleteGame({required String gameId}) async {
+    return _games.remove(gameId);
+  }
 
   @override
   Future<String> crateApiGreet({required String name}) async {
     return 'Hello, $name! Welcome to Xfutebol!';
   }
 
-  /// Creates a mock set of 12 pieces for testing.
+  /// Creates a mock set of 14 pieces for testing (7 per team).
   List<PieceView> _createMockPieces() {
     return [
-      // White team (6 pieces)
+      // White team (7 pieces)
       PieceView(
-        id: 0,
+        id: 'WG01',
         team: Team.white,
         role: PieceRole.goalkeeper,
         position: Position(row: 0, col: 3),
         hasBall: false,
       ),
       PieceView(
-        id: 1,
+        id: 'WD01',
         team: Team.white,
         role: PieceRole.defender,
         position: Position(row: 1, col: 1),
         hasBall: false,
       ),
       PieceView(
-        id: 2,
+        id: 'WD02',
         team: Team.white,
         role: PieceRole.defender,
         position: Position(row: 1, col: 5),
         hasBall: false,
       ),
       PieceView(
-        id: 3,
+        id: 'WM01',
         team: Team.white,
         role: PieceRole.midfielder,
         position: Position(row: 2, col: 2),
         hasBall: false,
       ),
       PieceView(
-        id: 4,
+        id: 'WM02',
         team: Team.white,
         role: PieceRole.midfielder,
         position: Position(row: 2, col: 5),
         hasBall: false,
       ),
       PieceView(
-        id: 5,
+        id: 'WA01',
         team: Team.white,
         role: PieceRole.attacker,
         position: Position(row: 3, col: 3),
         hasBall: true, // Ball holder
       ),
-      // Black team (6 pieces)
       PieceView(
-        id: 6,
+        id: 'WA02',
+        team: Team.white,
+        role: PieceRole.attacker,
+        position: Position(row: 3, col: 4),
+        hasBall: false,
+      ),
+      // Black team (7 pieces)
+      PieceView(
+        id: 'BG01',
         team: Team.black,
         role: PieceRole.goalkeeper,
         position: Position(row: 7, col: 4),
         hasBall: false,
       ),
       PieceView(
-        id: 7,
+        id: 'BD01',
         team: Team.black,
         role: PieceRole.defender,
         position: Position(row: 6, col: 2),
         hasBall: false,
       ),
       PieceView(
-        id: 8,
+        id: 'BD02',
         team: Team.black,
         role: PieceRole.defender,
         position: Position(row: 6, col: 5),
         hasBall: false,
       ),
       PieceView(
-        id: 9,
+        id: 'BM01',
         team: Team.black,
         role: PieceRole.midfielder,
         position: Position(row: 5, col: 2),
         hasBall: false,
       ),
       PieceView(
-        id: 10,
+        id: 'BM02',
         team: Team.black,
         role: PieceRole.midfielder,
         position: Position(row: 5, col: 5),
         hasBall: false,
       ),
       PieceView(
-        id: 11,
+        id: 'BA01',
+        team: Team.black,
+        role: PieceRole.attacker,
+        position: Position(row: 4, col: 3),
+        hasBall: false,
+      ),
+      PieceView(
+        id: 'BA02',
         team: Team.black,
         role: PieceRole.attacker,
         position: Position(row: 4, col: 4),
@@ -156,4 +421,3 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
     ];
   }
 }
-

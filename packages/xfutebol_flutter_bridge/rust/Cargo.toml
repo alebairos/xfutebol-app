@@ -8,6 +8,8 @@ crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 flutter_rust_bridge = "=2.11.1"
+once_cell = "1.19"
+uuid = { version = "1.6", features = ["v4"] }
 
 # Reference the game engine from sibling directory
 # Path: packages/xfutebol_flutter_bridge/rust/ -> ../../../../xfutebol-engine
