@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1553868706;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1490315021;
 
 // Section: executor
 
@@ -272,6 +272,28 @@ fn wire__crate__api__execute_shoot_impl(
         },
     )
 }
+fn wire__crate__api__export_board_notation_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "export_board_notation",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::export_board_notation(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__game_exists_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     game_id: impl CstDecode<String>,
@@ -287,6 +309,27 @@ fn wire__crate__api__game_exists_impl(
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(crate::api::game_exists(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_action_log_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_action_log",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_action_log(api_game_id))?;
                     Ok(output_ok)
                 })())
             }
@@ -358,6 +401,30 @@ fn wire__crate__api__get_bot_move_impl(
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok =
                         Result::<_, ()>::Ok(crate::api::get_bot_move(api_game_id, api_difficulty))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__get_last_n_actions_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+    n: impl CstDecode<u32>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_last_n_actions",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            let api_n = n.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::get_last_n_actions(api_game_id, api_n))?;
                     Ok(output_ok)
                 })())
             }
@@ -546,6 +613,27 @@ fn wire__crate__api__get_legal_shoots_impl(
         },
     )
 }
+fn wire__crate__api__get_match_state_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    game_id: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_match_state",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_game_id = game_id.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(crate::api::get_match_state(api_game_id))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__get_winner_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     game_id: impl CstDecode<String>,
@@ -709,6 +797,12 @@ impl CstDecode<u32> for u32 {
         self
     }
 }
+impl CstDecode<u64> for u64 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> u64 {
+        self
+    }
+}
 impl CstDecode<u8> for u8 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> u8 {
@@ -720,6 +814,28 @@ impl SseDecode for String {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
+    }
+}
+
+impl SseDecode for crate::api::ActionLogView {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_pieceId = <Option<String>>::sse_decode(deserializer);
+        let mut var_team = <Option<crate::api::Team>>::sse_decode(deserializer);
+        let mut var_actionType = <crate::api::ActionType>::sse_decode(deserializer);
+        let mut var_from = <crate::api::Position>::sse_decode(deserializer);
+        let mut var_to = <crate::api::Position>::sse_decode(deserializer);
+        let mut var_path = <Vec<crate::api::Position>>::sse_decode(deserializer);
+        let mut var_timestampMs = <u64>::sse_decode(deserializer);
+        return crate::api::ActionLogView {
+            piece_id: var_pieceId,
+            team: var_team,
+            action_type: var_actionType,
+            from: var_from,
+            to: var_to,
+            path: var_path,
+            timestamp_ms: var_timestampMs,
+        };
     }
 }
 
@@ -839,6 +955,18 @@ impl SseDecode for i32 {
     }
 }
 
+impl SseDecode for Vec<crate::api::ActionLogView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::ActionLogView>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::api::PieceView> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -887,6 +1015,45 @@ impl SseDecode for Vec<u8> {
     }
 }
 
+impl SseDecode for crate::api::MatchStateView {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_gameId = <String>::sse_decode(deserializer);
+        let mut var_mode = <crate::api::GameModeType>::sse_decode(deserializer);
+        let mut var_currentTurn = <u32>::sse_decode(deserializer);
+        let mut var_actionsRemaining = <u8>::sse_decode(deserializer);
+        let mut var_scoreWhite = <u8>::sse_decode(deserializer);
+        let mut var_scoreBlack = <u8>::sse_decode(deserializer);
+        let mut var_isFinished = <bool>::sse_decode(deserializer);
+        let mut var_winner = <Option<crate::api::Team>>::sse_decode(deserializer);
+        let mut var_actionCount = <u32>::sse_decode(deserializer);
+        let mut var_boardNotation = <String>::sse_decode(deserializer);
+        return crate::api::MatchStateView {
+            game_id: var_gameId,
+            mode: var_mode,
+            current_turn: var_currentTurn,
+            actions_remaining: var_actionsRemaining,
+            score_white: var_scoreWhite,
+            score_black: var_scoreBlack,
+            is_finished: var_isFinished,
+            winner: var_winner,
+            action_count: var_actionCount,
+            board_notation: var_boardNotation,
+        };
+    }
+}
+
+impl SseDecode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<String>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::api::BoardView> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -903,6 +1070,17 @@ impl SseDecode for Option<crate::api::BotAction> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<crate::api::BotAction>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::MatchStateView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::MatchStateView>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1024,6 +1202,13 @@ impl SseDecode for u32 {
     }
 }
 
+impl SseDecode for u64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_u64::<NativeEndian>().unwrap()
+    }
+}
+
 impl SseDecode for u8 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1063,6 +1248,27 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::ActionLogView {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.piece_id.into_into_dart().into_dart(),
+            self.team.into_into_dart().into_dart(),
+            self.action_type.into_into_dart().into_dart(),
+            self.from.into_into_dart().into_dart(),
+            self.to.into_into_dart().into_dart(),
+            self.path.into_into_dart().into_dart(),
+            self.timestamp_ms.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::ActionLogView {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::ActionLogView> for crate::api::ActionLogView {
+    fn into_into_dart(self) -> crate::api::ActionLogView {
+        self
+    }
+}
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::ActionResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
@@ -1178,6 +1384,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::GameModeType> for crate::api:
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::MatchStateView {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.game_id.into_into_dart().into_dart(),
+            self.mode.into_into_dart().into_dart(),
+            self.current_turn.into_into_dart().into_dart(),
+            self.actions_remaining.into_into_dart().into_dart(),
+            self.score_white.into_into_dart().into_dart(),
+            self.score_black.into_into_dart().into_dart(),
+            self.is_finished.into_into_dart().into_dart(),
+            self.winner.into_into_dart().into_dart(),
+            self.action_count.into_into_dart().into_dart(),
+            self.board_notation.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::MatchStateView {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::MatchStateView> for crate::api::MatchStateView {
+    fn into_into_dart(self) -> crate::api::MatchStateView {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::PieceRole {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -1263,6 +1493,19 @@ impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<u8>>::sse_encode(self.into_bytes(), serializer);
+    }
+}
+
+impl SseEncode for crate::api::ActionLogView {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<String>>::sse_encode(self.piece_id, serializer);
+        <Option<crate::api::Team>>::sse_encode(self.team, serializer);
+        <crate::api::ActionType>::sse_encode(self.action_type, serializer);
+        <crate::api::Position>::sse_encode(self.from, serializer);
+        <crate::api::Position>::sse_encode(self.to, serializer);
+        <Vec<crate::api::Position>>::sse_encode(self.path, serializer);
+        <u64>::sse_encode(self.timestamp_ms, serializer);
     }
 }
 
@@ -1370,6 +1613,16 @@ impl SseEncode for i32 {
     }
 }
 
+impl SseEncode for Vec<crate::api::ActionLogView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::ActionLogView>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::api::PieceView> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1410,6 +1663,32 @@ impl SseEncode for Vec<u8> {
     }
 }
 
+impl SseEncode for crate::api::MatchStateView {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.game_id, serializer);
+        <crate::api::GameModeType>::sse_encode(self.mode, serializer);
+        <u32>::sse_encode(self.current_turn, serializer);
+        <u8>::sse_encode(self.actions_remaining, serializer);
+        <u8>::sse_encode(self.score_white, serializer);
+        <u8>::sse_encode(self.score_black, serializer);
+        <bool>::sse_encode(self.is_finished, serializer);
+        <Option<crate::api::Team>>::sse_encode(self.winner, serializer);
+        <u32>::sse_encode(self.action_count, serializer);
+        <String>::sse_encode(self.board_notation, serializer);
+    }
+}
+
+impl SseEncode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <String>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<crate::api::BoardView> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1426,6 +1705,16 @@ impl SseEncode for Option<crate::api::BotAction> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <crate::api::BotAction>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::MatchStateView> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::MatchStateView>::sse_encode(value, serializer);
         }
     }
 }
@@ -1535,6 +1824,13 @@ impl SseEncode for u32 {
     }
 }
 
+impl SseEncode for u64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_u64::<NativeEndian>(self).unwrap();
+    }
+}
+
 impl SseEncode for u8 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1572,6 +1868,20 @@ mod io {
         fn cst_decode(self) -> String {
             let vec: Vec<u8> = self.cst_decode();
             String::from_utf8(vec).unwrap()
+        }
+    }
+    impl CstDecode<crate::api::ActionLogView> for wire_cst_action_log_view {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::ActionLogView {
+            crate::api::ActionLogView {
+                piece_id: self.piece_id.cst_decode(),
+                team: self.team.cst_decode(),
+                action_type: self.action_type.cst_decode(),
+                from: self.from.cst_decode(),
+                to: self.to.cst_decode(),
+                path: self.path.cst_decode(),
+                timestamp_ms: self.timestamp_ms.cst_decode(),
+            }
         }
     }
     impl CstDecode<crate::api::ActionResult> for wire_cst_action_result {
@@ -1627,6 +1937,13 @@ mod io {
             CstDecode::<crate::api::BotAction>::cst_decode(*wrap).into()
         }
     }
+    impl CstDecode<crate::api::MatchStateView> for *mut wire_cst_match_state_view {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::MatchStateView {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::MatchStateView>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::Position> for *mut wire_cst_position {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::Position {
@@ -1646,6 +1963,16 @@ mod io {
         fn cst_decode(self) -> crate::api::Team {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
             CstDecode::<crate::api::Team>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<Vec<crate::api::ActionLogView>> for *mut wire_cst_list_action_log_view {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::ActionLogView> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
         }
     }
     impl CstDecode<Vec<crate::api::PieceView>> for *mut wire_cst_list_piece_view {
@@ -1687,6 +2014,23 @@ mod io {
             }
         }
     }
+    impl CstDecode<crate::api::MatchStateView> for wire_cst_match_state_view {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::MatchStateView {
+            crate::api::MatchStateView {
+                game_id: self.game_id.cst_decode(),
+                mode: self.mode.cst_decode(),
+                current_turn: self.current_turn.cst_decode(),
+                actions_remaining: self.actions_remaining.cst_decode(),
+                score_white: self.score_white.cst_decode(),
+                score_black: self.score_black.cst_decode(),
+                is_finished: self.is_finished.cst_decode(),
+                winner: self.winner.cst_decode(),
+                action_count: self.action_count.cst_decode(),
+                board_notation: self.board_notation.cst_decode(),
+            }
+        }
+    }
     impl CstDecode<crate::api::PieceView> for wire_cst_piece_view {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::PieceView {
@@ -1720,6 +2064,24 @@ mod io {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> (String, crate::api::Position) {
             (self.field0.cst_decode(), self.field1.cst_decode())
+        }
+    }
+    impl NewWithNullPtr for wire_cst_action_log_view {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                piece_id: core::ptr::null_mut(),
+                team: core::ptr::null_mut(),
+                action_type: Default::default(),
+                from: Default::default(),
+                to: Default::default(),
+                path: core::ptr::null_mut(),
+                timestamp_ms: Default::default(),
+            }
+        }
+    }
+    impl Default for wire_cst_action_log_view {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
         }
     }
     impl NewWithNullPtr for wire_cst_action_result {
@@ -1769,6 +2131,27 @@ mod io {
         }
     }
     impl Default for wire_cst_bot_action {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_match_state_view {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                game_id: core::ptr::null_mut(),
+                mode: Default::default(),
+                current_turn: Default::default(),
+                actions_remaining: Default::default(),
+                score_white: Default::default(),
+                score_black: Default::default(),
+                is_finished: Default::default(),
+                winner: core::ptr::null_mut(),
+                action_count: Default::default(),
+                board_notation: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_match_state_view {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -1908,11 +2291,27 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__export_board_notation(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__export_board_notation_impl(port_, game_id)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__game_exists(
         port_: i64,
         game_id: *mut wire_cst_list_prim_u_8_strict,
     ) {
         wire__crate__api__game_exists_impl(port_, game_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_action_log(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_action_log_impl(port_, game_id)
     }
 
     #[unsafe(no_mangle)]
@@ -1939,6 +2338,15 @@ mod io {
         difficulty: i32,
     ) {
         wire__crate__api__get_bot_move_impl(port_, game_id, difficulty)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_last_n_actions(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        n: u32,
+    ) {
+        wire__crate__api__get_last_n_actions_impl(port_, game_id, n)
     }
 
     #[unsafe(no_mangle)]
@@ -2005,6 +2413,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_match_state(
+        port_: i64,
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__get_match_state_impl(port_, game_id)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_wire__crate__api__get_winner(
         port_: i64,
         game_id: *mut wire_cst_list_prim_u_8_strict,
@@ -2053,6 +2469,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_match_state_view(
+    ) -> *mut wire_cst_match_state_view {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_match_state_view::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_position(
     ) -> *mut wire_cst_position {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_position::new_with_null_ptr())
@@ -2071,6 +2495,20 @@ mod io {
         value: i32,
     ) -> *mut i32 {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xfutebol_flutter_bridge_cst_new_list_action_log_view(
+        len: i32,
+    ) -> *mut wire_cst_list_action_log_view {
+        let wrap = wire_cst_list_action_log_view {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_action_log_view>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
     }
 
     #[unsafe(no_mangle)]
@@ -2128,6 +2566,17 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_action_log_view {
+        piece_id: *mut wire_cst_list_prim_u_8_strict,
+        team: *mut i32,
+        action_type: i32,
+        from: wire_cst_position,
+        to: wire_cst_position,
+        path: *mut wire_cst_list_position,
+        timestamp_ms: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_action_result {
         success: bool,
         message: *mut wire_cst_list_prim_u_8_strict,
@@ -2158,6 +2607,12 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_list_action_log_view {
+        ptr: *mut wire_cst_action_log_view,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_list_piece_view {
         ptr: *mut wire_cst_piece_view,
         len: i32,
@@ -2179,6 +2634,20 @@ mod io {
     pub struct wire_cst_list_prim_u_8_strict {
         ptr: *mut u8,
         len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_match_state_view {
+        game_id: *mut wire_cst_list_prim_u_8_strict,
+        mode: i32,
+        current_turn: u32,
+        actions_remaining: u8,
+        score_white: u8,
+        score_black: u8,
+        is_finished: bool,
+        winner: *mut i32,
+        action_count: u32,
+        board_notation: *mut wire_cst_list_prim_u_8_strict,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -2237,6 +2706,31 @@ mod web {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> String {
             self
+        }
+    }
+    impl CstDecode<crate::api::ActionLogView>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::ActionLogView {
+            let self_ = self
+                .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap();
+            assert_eq!(
+                self_.length(),
+                7,
+                "Expected 7 elements, got {}",
+                self_.length()
+            );
+            crate::api::ActionLogView {
+                piece_id: self_.get(0).cst_decode(),
+                team: self_.get(1).cst_decode(),
+                action_type: self_.get(2).cst_decode(),
+                from: self_.get(3).cst_decode(),
+                to: self_.get(4).cst_decode(),
+                path: self_.get(5).cst_decode(),
+                timestamp_ms: self_.get(6).cst_decode(),
+            }
         }
     }
     impl CstDecode<crate::api::ActionResult>
@@ -2311,6 +2805,18 @@ mod web {
             }
         }
     }
+    impl CstDecode<Vec<crate::api::ActionLogView>>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::ActionLogView> {
+            self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap()
+                .iter()
+                .map(CstDecode::cst_decode)
+                .collect()
+        }
+    }
     impl CstDecode<Vec<crate::api::PieceView>>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
@@ -2351,6 +2857,40 @@ mod web {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> Vec<u8> {
             self.into_vec()
+        }
+    }
+    impl CstDecode<crate::api::MatchStateView>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::MatchStateView {
+            let self_ = self
+                .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap();
+            assert_eq!(
+                self_.length(),
+                10,
+                "Expected 10 elements, got {}",
+                self_.length()
+            );
+            crate::api::MatchStateView {
+                game_id: self_.get(0).cst_decode(),
+                mode: self_.get(1).cst_decode(),
+                current_turn: self_.get(2).cst_decode(),
+                actions_remaining: self_.get(3).cst_decode(),
+                score_white: self_.get(4).cst_decode(),
+                score_black: self_.get(5).cst_decode(),
+                is_finished: self_.get(6).cst_decode(),
+                winner: self_.get(7).cst_decode(),
+                action_count: self_.get(8).cst_decode(),
+                board_notation: self_.get(9).cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<Option<String>> for Option<String> {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Option<String> {
+            self.map(CstDecode::cst_decode)
         }
     }
     impl CstDecode<crate::api::PieceView>
@@ -2500,6 +3040,12 @@ mod web {
             self.unchecked_into_f64() as _
         }
     }
+    impl CstDecode<u64> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> u64 {
+            ::std::convert::TryInto::<u64>::try_into(self).unwrap() as _
+        }
+    }
     impl CstDecode<u8> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> u8 {
@@ -2587,11 +3133,27 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__export_board_notation(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+    ) {
+        wire__crate__api__export_board_notation_impl(port_, game_id)
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__game_exists(
         port_: flutter_rust_bridge::for_generated::MessagePort,
         game_id: String,
     ) {
         wire__crate__api__game_exists_impl(port_, game_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_action_log(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+    ) {
+        wire__crate__api__get_action_log_impl(port_, game_id)
     }
 
     #[wasm_bindgen]
@@ -2618,6 +3180,15 @@ mod web {
         difficulty: i32,
     ) {
         wire__crate__api__get_bot_move_impl(port_, game_id, difficulty)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_last_n_actions(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+        n: u32,
+    ) {
+        wire__crate__api__get_last_n_actions_impl(port_, game_id, n)
     }
 
     #[wasm_bindgen]
@@ -2681,6 +3252,14 @@ mod web {
         piece_id: String,
     ) {
         wire__crate__api__get_legal_shoots_impl(port_, game_id, piece_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__get_match_state(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        game_id: String,
+    ) {
+        wire__crate__api__get_match_state_impl(port_, game_id)
     }
 
     #[wasm_bindgen]

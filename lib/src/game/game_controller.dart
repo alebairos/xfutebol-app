@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:xfutebol_flutter_bridge/xfutebol_flutter_bridge.dart';
 
+import 'services/match_logger.dart';
+
 /// Controller for game state and bridge interactions.
 /// 
 /// Manages:
@@ -66,6 +68,10 @@ class GameController extends ChangeNotifier {
     return null;
   }
 
+  /// Match logger for debugging
+  MatchLogger? _logger;
+  MatchLogger? get logger => _logger;
+
   /// Start a new game
   Future<void> startNewGame() async {
     _isLoading = true;
@@ -77,7 +83,17 @@ class GameController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      _logger?.logBridgeStart('newGame');
       _gameId = await newGame(mode: GameModeType.quickMatch);
+      
+      // Initialize logger for this match
+      _logger = MatchLogger(_gameId!);
+      _logger!.logUI(UIEventType.gameStarted, 'New game started', data: {
+        'gameId': _gameId,
+        'mode': 'quickMatch',
+      });
+      _logger?.logBridgeComplete('newGame', result: {'gameId': _gameId});
+      
       await _refreshBoard();
       _selectedPieceId = null;
       _validMoves = [];
@@ -85,6 +101,7 @@ class GameController extends ChangeNotifier {
       _lastMoveTo = null;
     } catch (e) {
       _errorMessage = 'Failed to start game: $e';
+      _logger?.logError('Failed to start game', error: e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -107,6 +124,11 @@ class GameController extends ChangeNotifier {
   /// Handle square tap - select piece or execute move
   Future<void> handleSquareTap(Position position) async {
     if (_gameId == null || _board == null || isGameOver) return;
+
+    _logger?.logUI(UIEventType.squareTapped, 'position', data: {
+      'row': position.row,
+      'col': position.col,
+    });
 
     // Check if tapped on a piece
     final tappedPiece = _board!.pieces.where(
@@ -135,6 +157,13 @@ class GameController extends ChangeNotifier {
   Future<void> _handlePieceTap(PieceView piece) async {
     if (_gameId == null || _board == null) return;
 
+    _logger?.logUI(UIEventType.pieceTapped, piece.id, data: {
+      'team': piece.team.name,
+      'role': piece.role.name,
+      'position': '(${piece.position.row},${piece.position.col})',
+      'hasBall': piece.hasBall,
+    });
+
     // Can only select own pieces on your turn
     if (piece.team != _board!.currentTurn) {
       _clearSelection();
@@ -155,10 +184,17 @@ class GameController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      _logger?.logBridgeStart('getLegalMoves');
       _validMoves = await getLegalMoves(gameId: _gameId!, pieceId: piece.id);
+      _logger?.logBridgeComplete('getLegalMoves', result: {'moveCount': _validMoves.length});
+      _logger?.logUI(UIEventType.validMovesComputed, 'moves', data: {
+        'count': _validMoves.length,
+        'moves': _validMoves.map((m) => '(${m.row},${m.col})').toList(),
+      });
     } catch (e) {
       _errorMessage = 'Failed to get moves: $e';
       _validMoves = [];
+      _logger?.logBridgeFailed('getLegalMoves', e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -181,12 +217,21 @@ class GameController extends ChangeNotifier {
       _lastMoveFrom = selectedPiece.position;
       _lastMoveTo = target;
 
+      _logger?.logBridgeStart('executeMove');
       // Execute the move and handle result
       final result = await executeMove(
         gameId: _gameId!,
         pieceId: _selectedPieceId!,
         to: target,
       );
+      _logger?.logBridgeComplete('executeMove', result: {
+        'success': result.success,
+        'message': result.message,
+        'goalScored': result.goalScored?.name,
+      });
+
+      // Sync engine log after action
+      await _logger?.syncFromEngine();
 
       await _handleActionResult(result);
       _clearSelection();
@@ -197,6 +242,7 @@ class GameController extends ChangeNotifier {
       }
     } catch (e) {
       _errorMessage = 'Move failed: $e';
+      _logger?.logBridgeFailed('executeMove', e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -207,6 +253,7 @@ class GameController extends ChangeNotifier {
   Future<void> _handleActionResult(ActionResult result) async {
     if (!result.success) {
       _errorMessage = result.message;
+      _logger?.logError('Action failed', error: result.message);
       return;
     }
 
@@ -214,6 +261,10 @@ class GameController extends ChangeNotifier {
     if (result.goalScored != null) {
       _goalScoredBy = result.goalScored;
       _kickoffReset = result.kickoffReset;
+      _logger?.logUI(UIEventType.goalScored, result.goalScored!.name, data: {
+        'team': result.goalScored!.name,
+        'kickoffReset': result.kickoffReset,
+      });
       notifyListeners();
       // UI will show celebration and call clearGoalCelebration() when done
     }
@@ -351,8 +402,25 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Export match log to file
+  Future<void> exportLog() async {
+    if (_logger != null) {
+      _logger!.logUI(UIEventType.gameEnded, 'Game ended', data: {
+        'winner': winner?.name,
+        'scoreWhite': _board?.whiteScore,
+        'scoreBlack': _board?.blackScore,
+      });
+      await _logger!.exportToFile();
+    }
+  }
+
   @override
   void dispose() {
+    // Export log before cleanup
+    if (_logger != null) {
+      exportLog();
+    }
+    
     // Clean up game if needed
     if (_gameId != null) {
       deleteGame(gameId: _gameId!);

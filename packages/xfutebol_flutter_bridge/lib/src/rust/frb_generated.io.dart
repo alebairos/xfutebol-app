@@ -23,6 +23,9 @@ abstract class XfutebolBridgeApiImplPlatform
   String dco_decode_String(dynamic raw);
 
   @protected
+  ActionLogView dco_decode_action_log_view(dynamic raw);
+
+  @protected
   ActionResult dco_decode_action_result(dynamic raw);
 
   @protected
@@ -44,6 +47,9 @@ abstract class XfutebolBridgeApiImplPlatform
   BotAction dco_decode_box_autoadd_bot_action(dynamic raw);
 
   @protected
+  MatchStateView dco_decode_box_autoadd_match_state_view(dynamic raw);
+
+  @protected
   Position dco_decode_box_autoadd_position(dynamic raw);
 
   @protected
@@ -62,6 +68,9 @@ abstract class XfutebolBridgeApiImplPlatform
   int dco_decode_i_32(dynamic raw);
 
   @protected
+  List<ActionLogView> dco_decode_list_action_log_view(dynamic raw);
+
+  @protected
   List<PieceView> dco_decode_list_piece_view(dynamic raw);
 
   @protected
@@ -74,10 +83,19 @@ abstract class XfutebolBridgeApiImplPlatform
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  MatchStateView dco_decode_match_state_view(dynamic raw);
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw);
+
+  @protected
   BoardView? dco_decode_opt_box_autoadd_board_view(dynamic raw);
 
   @protected
   BotAction? dco_decode_opt_box_autoadd_bot_action(dynamic raw);
+
+  @protected
+  MatchStateView? dco_decode_opt_box_autoadd_match_state_view(dynamic raw);
 
   @protected
   Position? dco_decode_opt_box_autoadd_position(dynamic raw);
@@ -112,6 +130,9 @@ abstract class XfutebolBridgeApiImplPlatform
   int dco_decode_u_32(dynamic raw);
 
   @protected
+  BigInt dco_decode_u_64(dynamic raw);
+
+  @protected
   int dco_decode_u_8(dynamic raw);
 
   @protected
@@ -119,6 +140,9 @@ abstract class XfutebolBridgeApiImplPlatform
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
+
+  @protected
+  ActionLogView sse_decode_action_log_view(SseDeserializer deserializer);
 
   @protected
   ActionResult sse_decode_action_result(SseDeserializer deserializer);
@@ -142,6 +166,11 @@ abstract class XfutebolBridgeApiImplPlatform
   BotAction sse_decode_box_autoadd_bot_action(SseDeserializer deserializer);
 
   @protected
+  MatchStateView sse_decode_box_autoadd_match_state_view(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Position sse_decode_box_autoadd_position(SseDeserializer deserializer);
 
   @protected
@@ -162,6 +191,11 @@ abstract class XfutebolBridgeApiImplPlatform
   int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
+  List<ActionLogView> sse_decode_list_action_log_view(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   List<PieceView> sse_decode_list_piece_view(SseDeserializer deserializer);
 
   @protected
@@ -176,12 +210,23 @@ abstract class XfutebolBridgeApiImplPlatform
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  MatchStateView sse_decode_match_state_view(SseDeserializer deserializer);
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
   BoardView? sse_decode_opt_box_autoadd_board_view(
     SseDeserializer deserializer,
   );
 
   @protected
   BotAction? sse_decode_opt_box_autoadd_bot_action(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  MatchStateView? sse_decode_opt_box_autoadd_match_state_view(
     SseDeserializer deserializer,
   );
 
@@ -220,6 +265,9 @@ abstract class XfutebolBridgeApiImplPlatform
   int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
+  BigInt sse_decode_u_64(SseDeserializer deserializer);
+
+  @protected
   int sse_decode_u_8(SseDeserializer deserializer);
 
   @protected
@@ -252,6 +300,15 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  ffi.Pointer<wire_cst_match_state_view>
+  cst_encode_box_autoadd_match_state_view(MatchStateView raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_match_state_view();
+    cst_api_fill_to_wire_match_state_view(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_position> cst_encode_box_autoadd_position(Position raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     final ptr = wire.cst_new_box_autoadd_position();
@@ -272,6 +329,18 @@ abstract class XfutebolBridgeApiImplPlatform
   ffi.Pointer<ffi.Int32> cst_encode_box_autoadd_team(Team raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return wire.cst_new_box_autoadd_team(cst_encode_team(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_action_log_view> cst_encode_list_action_log_view(
+    List<ActionLogView> raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ans = wire.cst_new_list_action_log_view(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      cst_api_fill_to_wire_action_log_view(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
   }
 
   @protected
@@ -321,6 +390,14 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_opt_String(
+    String? raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null ? ffi.nullptr : cst_encode_String(raw);
+  }
+
+  @protected
   ffi.Pointer<wire_cst_board_view> cst_encode_opt_box_autoadd_board_view(
     BoardView? raw,
   ) {
@@ -334,6 +411,15 @@ abstract class XfutebolBridgeApiImplPlatform
   ) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw == null ? ffi.nullptr : cst_encode_box_autoadd_bot_action(raw);
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_match_state_view>
+  cst_encode_opt_box_autoadd_match_state_view(MatchStateView? raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null
+        ? ffi.nullptr
+        : cst_encode_box_autoadd_match_state_view(raw);
   }
 
   @protected
@@ -357,6 +443,26 @@ abstract class XfutebolBridgeApiImplPlatform
   ffi.Pointer<ffi.Int32> cst_encode_opt_box_autoadd_team(Team? raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw == null ? ffi.nullptr : cst_encode_box_autoadd_team(raw);
+  }
+
+  @protected
+  int cst_encode_u_64(BigInt raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw.toSigned(64).toInt();
+  }
+
+  @protected
+  void cst_api_fill_to_wire_action_log_view(
+    ActionLogView apiObj,
+    wire_cst_action_log_view wireObj,
+  ) {
+    wireObj.piece_id = cst_encode_opt_String(apiObj.pieceId);
+    wireObj.team = cst_encode_opt_box_autoadd_team(apiObj.team);
+    wireObj.action_type = cst_encode_action_type(apiObj.actionType);
+    cst_api_fill_to_wire_position(apiObj.from, wireObj.from);
+    cst_api_fill_to_wire_position(apiObj.to, wireObj.to);
+    wireObj.path = cst_encode_list_position(apiObj.path);
+    wireObj.timestamp_ms = cst_encode_u_64(apiObj.timestampMs);
   }
 
   @protected
@@ -417,6 +523,14 @@ abstract class XfutebolBridgeApiImplPlatform
   }
 
   @protected
+  void cst_api_fill_to_wire_box_autoadd_match_state_view(
+    MatchStateView apiObj,
+    ffi.Pointer<wire_cst_match_state_view> wireObj,
+  ) {
+    cst_api_fill_to_wire_match_state_view(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_position(
     Position apiObj,
     ffi.Pointer<wire_cst_position> wireObj,
@@ -430,6 +544,23 @@ abstract class XfutebolBridgeApiImplPlatform
     ffi.Pointer<wire_cst_record_string_position> wireObj,
   ) {
     cst_api_fill_to_wire_record_string_position(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_match_state_view(
+    MatchStateView apiObj,
+    wire_cst_match_state_view wireObj,
+  ) {
+    wireObj.game_id = cst_encode_String(apiObj.gameId);
+    wireObj.mode = cst_encode_game_mode_type(apiObj.mode);
+    wireObj.current_turn = cst_encode_u_32(apiObj.currentTurn);
+    wireObj.actions_remaining = cst_encode_u_8(apiObj.actionsRemaining);
+    wireObj.score_white = cst_encode_u_8(apiObj.scoreWhite);
+    wireObj.score_black = cst_encode_u_8(apiObj.scoreBlack);
+    wireObj.is_finished = cst_encode_bool(apiObj.isFinished);
+    wireObj.winner = cst_encode_opt_box_autoadd_team(apiObj.winner);
+    wireObj.action_count = cst_encode_u_32(apiObj.actionCount);
+    wireObj.board_notation = cst_encode_String(apiObj.boardNotation);
   }
 
   @protected
@@ -504,6 +635,9 @@ abstract class XfutebolBridgeApiImplPlatform
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_action_log_view(ActionLogView self, SseSerializer serializer);
+
+  @protected
   void sse_encode_action_result(ActionResult self, SseSerializer serializer);
 
   @protected
@@ -531,6 +665,12 @@ abstract class XfutebolBridgeApiImplPlatform
   );
 
   @protected
+  void sse_encode_box_autoadd_match_state_view(
+    MatchStateView self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_box_autoadd_position(Position self, SseSerializer serializer);
 
   @protected
@@ -550,6 +690,12 @@ abstract class XfutebolBridgeApiImplPlatform
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_action_log_view(
+    List<ActionLogView> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_piece_view(
@@ -573,6 +719,15 @@ abstract class XfutebolBridgeApiImplPlatform
   );
 
   @protected
+  void sse_encode_match_state_view(
+    MatchStateView self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_board_view(
     BoardView? self,
     SseSerializer serializer,
@@ -581,6 +736,12 @@ abstract class XfutebolBridgeApiImplPlatform
   @protected
   void sse_encode_opt_box_autoadd_bot_action(
     BotAction? self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_opt_box_autoadd_match_state_view(
+    MatchStateView? self,
     SseSerializer serializer,
   );
 
@@ -622,6 +783,9 @@ abstract class XfutebolBridgeApiImplPlatform
 
   @protected
   void sse_encode_u_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_u_64(BigInt self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -914,6 +1078,30 @@ class XfutebolBridgeWire implements BaseWire {
             )
           >();
 
+  void wire__crate__api__export_board_notation(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+  ) {
+    return _wire__crate__api__export_board_notation(port_, game_id);
+  }
+
+  late final _wire__crate__api__export_board_notationPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >(
+        'frbgen_xfutebol_flutter_bridge_wire__crate__api__export_board_notation',
+      );
+  late final _wire__crate__api__export_board_notation =
+      _wire__crate__api__export_board_notationPtr
+          .asFunction<
+            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
+          >();
+
   void wire__crate__api__game_exists(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
@@ -934,6 +1122,28 @@ class XfutebolBridgeWire implements BaseWire {
       .asFunction<
         void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
       >();
+
+  void wire__crate__api__get_action_log(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+  ) {
+    return _wire__crate__api__get_action_log(port_, game_id);
+  }
+
+  late final _wire__crate__api__get_action_logPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_action_log');
+  late final _wire__crate__api__get_action_log =
+      _wire__crate__api__get_action_logPtr
+          .asFunction<
+            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
+          >();
 
   void wire__crate__api__get_board(
     int port_,
@@ -1000,6 +1210,30 @@ class XfutebolBridgeWire implements BaseWire {
       >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_bot_move');
   late final _wire__crate__api__get_bot_move =
       _wire__crate__api__get_bot_movePtr
+          .asFunction<
+            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)
+          >();
+
+  void wire__crate__api__get_last_n_actions(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+    int n,
+  ) {
+    return _wire__crate__api__get_last_n_actions(port_, game_id, n);
+  }
+
+  late final _wire__crate__api__get_last_n_actionsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Uint32,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_last_n_actions');
+  late final _wire__crate__api__get_last_n_actions =
+      _wire__crate__api__get_last_n_actionsPtr
           .asFunction<
             void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)
           >();
@@ -1202,6 +1436,28 @@ class XfutebolBridgeWire implements BaseWire {
             )
           >();
 
+  void wire__crate__api__get_match_state(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
+  ) {
+    return _wire__crate__api__get_match_state(port_, game_id);
+  }
+
+  late final _wire__crate__api__get_match_statePtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )
+        >
+      >('frbgen_xfutebol_flutter_bridge_wire__crate__api__get_match_state');
+  late final _wire__crate__api__get_match_state =
+      _wire__crate__api__get_match_statePtr
+          .asFunction<
+            void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)
+          >();
+
   void wire__crate__api__get_winner(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id,
@@ -1301,6 +1557,19 @@ class XfutebolBridgeWire implements BaseWire {
       _cst_new_box_autoadd_bot_actionPtr
           .asFunction<ffi.Pointer<wire_cst_bot_action> Function()>();
 
+  ffi.Pointer<wire_cst_match_state_view>
+  cst_new_box_autoadd_match_state_view() {
+    return _cst_new_box_autoadd_match_state_view();
+  }
+
+  late final _cst_new_box_autoadd_match_state_viewPtr =
+      _lookup<
+        ffi.NativeFunction<ffi.Pointer<wire_cst_match_state_view> Function()>
+      >('frbgen_xfutebol_flutter_bridge_cst_new_box_autoadd_match_state_view');
+  late final _cst_new_box_autoadd_match_state_view =
+      _cst_new_box_autoadd_match_state_viewPtr
+          .asFunction<ffi.Pointer<wire_cst_match_state_view> Function()>();
+
   ffi.Pointer<wire_cst_position> cst_new_box_autoadd_position() {
     return _cst_new_box_autoadd_position();
   }
@@ -1341,6 +1610,21 @@ class XfutebolBridgeWire implements BaseWire {
       );
   late final _cst_new_box_autoadd_team = _cst_new_box_autoadd_teamPtr
       .asFunction<ffi.Pointer<ffi.Int32> Function(int)>();
+
+  ffi.Pointer<wire_cst_list_action_log_view> cst_new_list_action_log_view(
+    int len,
+  ) {
+    return _cst_new_list_action_log_view(len);
+  }
+
+  late final _cst_new_list_action_log_viewPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_action_log_view> Function(ffi.Int32)
+        >
+      >('frbgen_xfutebol_flutter_bridge_cst_new_list_action_log_view');
+  late final _cst_new_list_action_log_view = _cst_new_list_action_log_viewPtr
+      .asFunction<ffi.Pointer<wire_cst_list_action_log_view> Function(int)>();
 
   ffi.Pointer<wire_cst_list_piece_view> cst_new_list_piece_view(int len) {
     return _cst_new_list_piece_view(len);
@@ -1490,10 +1774,64 @@ final class wire_cst_bot_action extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_position> path;
 }
 
+final class wire_cst_match_state_view extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> game_id;
+
+  @ffi.Int32()
+  external int mode;
+
+  @ffi.Uint32()
+  external int current_turn;
+
+  @ffi.Uint8()
+  external int actions_remaining;
+
+  @ffi.Uint8()
+  external int score_white;
+
+  @ffi.Uint8()
+  external int score_black;
+
+  @ffi.Bool()
+  external bool is_finished;
+
+  external ffi.Pointer<ffi.Int32> winner;
+
+  @ffi.Uint32()
+  external int action_count;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> board_notation;
+}
+
 final class wire_cst_record_string_position extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
 
   external wire_cst_position field1;
+}
+
+final class wire_cst_action_log_view extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> piece_id;
+
+  external ffi.Pointer<ffi.Int32> team;
+
+  @ffi.Int32()
+  external int action_type;
+
+  external wire_cst_position from;
+
+  external wire_cst_position to;
+
+  external ffi.Pointer<wire_cst_list_position> path;
+
+  @ffi.Uint64()
+  external int timestamp_ms;
+}
+
+final class wire_cst_list_action_log_view extends ffi.Struct {
+  external ffi.Pointer<wire_cst_action_log_view> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 final class wire_cst_position_path extends ffi.Struct {
