@@ -153,16 +153,21 @@ class XfutebolBoard extends StatelessWidget with BoardGeometry {
       }
     }
 
-    // Valid move highlights
+    // Valid move highlights (deduplicate positions to avoid duplicate keys)
     if (settings.showValidMoves && validMoves.isNotEmpty) {
+      final seenPositions = <String>{};
       for (final move in validMoves) {
+        final posKey = '${move.row}-${move.col}';
+        if (seenPositions.contains(posKey)) continue;
+        seenPositions.add(posKey);
+
         final isOccupied = board.pieces.any(
           (p) => p.position.row == move.row && p.position.col == move.col,
         );
 
         highlights.add(
           PositionedSquare(
-            key: ValueKey('valid-${move.row}-${move.col}'),
+            key: ValueKey('valid-$posKey'),
             boardSize: size,
             position: move,
             child: isOccupied
