@@ -8,6 +8,7 @@ import 'package:xfutebol_flutter_bridge/xfutebol_flutter_bridge.dart';
 /// - Piece selection and valid moves
 /// - Action execution (move, pass, shoot, etc.)
 /// - Bot turns
+/// - Goal detection and celebration
 class GameController extends ChangeNotifier {
   GameController();
 
@@ -41,12 +42,24 @@ class GameController extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  /// Game over state
-  bool get isGameOver => _board != null && 
-      (_board!.whiteScore >= 3 || _board!.blackScore >= 3);
+  /// Team that just scored (null if no recent goal)
+  /// This is set when a goal is scored and cleared after celebration
+  Team? _goalScoredBy;
+  Team? get goalScoredBy => _goalScoredBy;
+
+  /// Whether a kickoff reset just occurred
+  bool _kickoffReset = false;
+  bool get kickoffReset => _kickoffReset;
+
+  /// Game over state - uses engine's gameOver flag from last action
+  bool _isGameOver = false;
+  bool get isGameOver => _isGameOver || 
+      (_board != null && (_board!.whiteScore >= 3 || _board!.blackScore >= 3));
 
   /// Winner (null if game not over)
+  Team? _winner;
   Team? get winner {
+    if (_winner != null) return _winner;
     if (_board == null) return null;
     if (_board!.whiteScore >= 3) return Team.white;
     if (_board!.blackScore >= 3) return Team.black;
@@ -57,6 +70,10 @@ class GameController extends ChangeNotifier {
   Future<void> startNewGame() async {
     _isLoading = true;
     _errorMessage = null;
+    _isGameOver = false;
+    _winner = null;
+    _goalScoredBy = null;
+    _kickoffReset = false;
     notifyListeners();
 
     try {
@@ -71,6 +88,19 @@ class GameController extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  /// Clear goal celebration state and continue game
+  /// Called by UI after celebration animation completes
+  Future<void> clearGoalCelebration() async {
+    _goalScoredBy = null;
+    _kickoffReset = false;
+    notifyListeners();
+
+    // Continue bot turn if it's bot's turn after kickoff
+    if (!isGameOver && _board?.currentTurn == Team.black) {
+      await _handleBotTurn();
     }
   }
 
@@ -151,18 +181,20 @@ class GameController extends ChangeNotifier {
       _lastMoveFrom = selectedPiece.position;
       _lastMoveTo = target;
 
-      // Execute the move
-      await executeMove(
+      // Execute the move and handle result
+      final result = await executeMove(
         gameId: _gameId!,
         pieceId: _selectedPieceId!,
         to: target,
       );
 
-      await _refreshBoard();
+      await _handleActionResult(result);
       _clearSelection();
 
-      // Handle bot turn if needed
-      await _handleBotTurn();
+      // Handle bot turn if needed (after goal celebration)
+      if (_goalScoredBy == null && !isGameOver) {
+        await _handleBotTurn();
+      }
     } catch (e) {
       _errorMessage = 'Move failed: $e';
     } finally {
@@ -171,12 +203,37 @@ class GameController extends ChangeNotifier {
     }
   }
 
+  /// Handle action result - check for goals and game over
+  Future<void> _handleActionResult(ActionResult result) async {
+    if (!result.success) {
+      _errorMessage = result.message;
+      return;
+    }
+
+    // Check for goal scored
+    if (result.goalScored != null) {
+      _goalScoredBy = result.goalScored;
+      _kickoffReset = result.kickoffReset;
+      notifyListeners();
+      // UI will show celebration and call clearGoalCelebration() when done
+    }
+
+    // Check for game over
+    if (result.gameOver) {
+      _isGameOver = true;
+      _winner = result.winner;
+    }
+
+    // Refresh board state
+    await _refreshBoard();
+  }
+
   /// Handle bot turn (if it's black's turn)
   Future<void> _handleBotTurn() async {
     if (_gameId == null || _board == null || isGameOver) return;
 
     // Keep executing bot actions while it's black's turn
-    while (_board!.currentTurn == Team.black && !isGameOver) {
+    while (_board!.currentTurn == Team.black && !isGameOver && _goalScoredBy == null) {
       // Small delay to show the bot is "thinking"
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -202,10 +259,17 @@ class GameController extends ChangeNotifier {
         }
 
         // Execute the action based on type
-        await _executeBotAction(botAction);
-
-        await _refreshBoard();
-        notifyListeners();
+        final result = await _executeBotAction(botAction);
+        
+        if (result != null) {
+          await _handleActionResult(result);
+          notifyListeners();
+          
+          // Stop bot loop if goal scored (let celebration play)
+          if (_goalScoredBy != null || isGameOver) {
+            break;
+          }
+        }
       } catch (e) {
         _errorMessage = 'Bot move failed: $e';
         break;
@@ -213,63 +277,58 @@ class GameController extends ChangeNotifier {
     }
   }
 
-  /// Execute a bot action
-  Future<void> _executeBotAction(BotAction action) async {
+  /// Execute a bot action and return the result
+  Future<ActionResult?> _executeBotAction(BotAction action) async {
     switch (action.actionType) {
       case ActionType.move:
         if (action.path.isNotEmpty) {
-          await executeMove(
+          return executeMove(
             gameId: _gameId!,
             pieceId: action.pieceId,
             to: action.path.last,
           );
         }
-        break;
+        return null;
       case ActionType.pass:
-        await executePass(
+        return executePass(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.shoot:
-        await executeShoot(
+        return executeShoot(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.intercept:
-        await executeIntercept(
+        return executeIntercept(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.kick:
-        await executeKick(
+        return executeKick(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.defend:
-        await executeDefend(
+        return executeDefend(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.push:
         if (action.path.length >= 2) {
-          await executePush(
+          return executePush(
             gameId: _gameId!,
             pieceId: action.pieceId,
             target: action.path[0],
             destination: action.path[1],
           );
         }
-        break;
+        return null;
     }
   }
 
