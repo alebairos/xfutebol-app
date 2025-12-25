@@ -26,7 +26,8 @@ class PositionedSquare extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       left: position.col * squareSize,
-      top: position.row * squareSize,
+      // Flip Y-axis: engine row 0 at bottom, row 7 at top (chess convention)
+      top: (7 - position.row) * squareSize,
       width: squareSize,
       height: squareSize,
       child: child,
