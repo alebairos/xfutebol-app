@@ -105,6 +105,8 @@ pub struct ActionResult {
     pub goal_scored: Option<Team>,
     /// Whether the turn ended after this action
     pub turn_ended: bool,
+    /// Whether ball was reset to center after a goal (kickoff)
+    pub kickoff_reset: bool,
 }
 
 impl ActionResult {
@@ -117,6 +119,7 @@ impl ActionResult {
             actions_remaining: 0,
             goal_scored: None,
             turn_ended: false,
+            kickoff_reset: false,
         }
     }
     
@@ -129,6 +132,7 @@ impl ActionResult {
             actions_remaining: outcome.actions_remaining,
             goal_scored: outcome.goal_scored.map(|t| t.into()),
             turn_ended: outcome.turn_ended,
+            kickoff_reset: outcome.kickoff_reset,
         }
     }
 }

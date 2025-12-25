@@ -1,10 +1,10 @@
 # FT-017: ActionResult Field Expansion
 
-## Status: ✅ Implemented
+## Status: ✅ Complete (100% FT-011 Support)
 
 ## Summary
 
-Expanded the `ActionResult` struct in the Flutter bridge to expose additional fields from the engine's `ActionOutcome`, enabling the Flutter app to detect goals and turn endings.
+Expanded the `ActionResult` struct in the Flutter bridge to expose all fields from the engine's `ActionOutcome`, enabling the Flutter app to fully detect goals, turn endings, and kickoff resets.
 
 ## Problem
 
@@ -14,11 +14,15 @@ The bridge's `ActionResult` was missing critical fields that the engine provides
 |-------------|------|---------------|
 | `goal_scored` | `Option<Team>` | ❌ Missing |
 | `turn_ended` | `bool` | ❌ Missing |
+| `kickoff_reset` | `bool` | ❌ Missing |
 | `game_over` | `bool` | ✅ Existed |
 | `winner` | `Option<Team>` | ✅ Existed |
 | `actions_remaining` | `u8` | ✅ Existed |
 
-Without `goal_scored`, the Flutter app couldn't detect when a goal was scored to trigger celebrations or handle post-goal reset.
+Without these fields, the Flutter app couldn't:
+- Detect when a goal was scored to trigger celebrations
+- Know when the ball should reset to center after a goal
+- Handle post-goal kickoff properly
 
 ## Solution
 
@@ -37,6 +41,8 @@ pub struct ActionResult {
     pub goal_scored: Option<Team>,  // NEW
     /// Whether the turn ended after this action
     pub turn_ended: bool,           // NEW
+    /// Whether ball was reset to center after a goal (kickoff)
+    pub kickoff_reset: bool,        // NEW
 }
 
 impl ActionResult {
@@ -49,6 +55,7 @@ impl ActionResult {
             actions_remaining: outcome.actions_remaining,
             goal_scored: outcome.goal_scored.map(|t| t.into()),  // NEW
             turn_ended: outcome.turn_ended,                       // NEW
+            kickoff_reset: outcome.kickoff_reset,                 // NEW
         }
     }
 }
@@ -63,8 +70,9 @@ class ActionResult {
   final bool gameOver;
   final Team? winner;
   final int actionsRemaining;
-  final Team? goalScored;   // NEW - which team scored (null if no goal)
-  final bool turnEnded;     // NEW - whether this action ended the turn
+  final Team? goalScored;    // NEW - which team scored (null if no goal)
+  final bool turnEnded;      // NEW - whether this action ended the turn
+  final bool kickoffReset;   // NEW - whether ball reset to center after goal
   
   const ActionResult({
     required this.success,
@@ -74,6 +82,7 @@ class ActionResult {
     required this.actionsRemaining,
     this.goalScored,
     required this.turnEnded,
+    required this.kickoffReset,
   });
 }
 ```
@@ -98,8 +107,11 @@ Future<void> executePlayerMove(String pieceId, Position target) async {
     if (result.goalScored != null) {
       _showGoalCelebration(result.goalScored!);
       
-      // TODO: Handle post-goal reset when engine implements it
-      // For now, the engine continues without resetting
+      // Check if kickoff reset occurred (ball returned to center)
+      if (result.kickoffReset) {
+        _playKickoffAnimation();
+        // Board state is already updated by engine
+      }
     }
     
     // Check if turn ended
@@ -122,7 +134,7 @@ Future<void> executePlayerMove(String pieceId, Position target) async {
 
 | File | Change |
 |------|--------|
-| `packages/xfutebol_flutter_bridge/rust/src/api.rs` | Added `goal_scored` and `turn_ended` fields |
+| `packages/xfutebol_flutter_bridge/rust/src/api.rs` | Added `goal_scored`, `turn_ended`, and `kickoff_reset` fields |
 | `packages/xfutebol_flutter_bridge/lib/src/rust/api.dart` | Auto-regenerated |
 | `packages/xfutebol_flutter_bridge/lib/src/rust/frb_generated.dart` | Auto-regenerated |
 | `packages/xfutebol_flutter_bridge/lib/src/rust/frb_generated.io.dart` | Auto-regenerated |
@@ -135,22 +147,38 @@ Future<void> executePlayerMove(String pieceId, Position target) async {
 ```bash
 # Run bridge tests
 cd packages/xfutebol_flutter_bridge
-flutter test test/api_contract_test.dart
+flutter test
 
 # Run integration tests (requires device)
 cd /path/to/xfutebol-app
 flutter test integration_test/app_test.dart -d <device_id>
 ```
 
+## Engine → Bridge Field Mapping (100% Complete)
+
+| Engine `ActionOutcome` | Bridge `ActionResult` | Status |
+|------------------------|----------------------|--------|
+| `action` | - | Not exposed (internal) |
+| `piece_id` | - | Not exposed (use BoardView) |
+| `from` | - | Not exposed (use BoardView) |
+| `to` | - | Not exposed (use BoardView) |
+| `path` | - | Not exposed (use BoardView) |
+| `turn_ended` | `turnEnded` | ✅ Mapped |
+| `goal_scored` | `goalScored` | ✅ Mapped |
+| `game_over` | `gameOver` | ✅ Mapped |
+| `winner` | `winner` | ✅ Mapped |
+| `actions_remaining` | `actionsRemaining` | ✅ Mapped |
+| `kickoff_reset` | `kickoffReset` | ✅ Mapped |
+
 ## Related
 
-- **FT-016**: Post-Goal Reset - The engine still needs to implement board reset after goal
-- This change enables the app to DETECT goals, but the reset logic is pending in the engine
+- **FT-016**: Post-Goal Reset - Engine already implements kickoff reset; bridge now exposes it
+- This change enables the app to fully handle goals and kickoffs
 
 ## Next Steps
 
-1. [ ] Implement post-goal reset in `xfutebol-engine` (FT-016)
+1. [x] ~~Implement post-goal reset in engine~~ (Already done in engine)
 2. [ ] Add goal celebration animation in Flutter app
-3. [ ] Update `GameController` to handle `goalScored` event
+3. [ ] Update `GameController` to handle `goalScored` + `kickoffReset` events
 4. [ ] Add sound effects for goal scoring
 

@@ -130,6 +130,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -138,6 +139,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 
@@ -154,6 +156,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -162,6 +165,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 
@@ -178,6 +182,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -186,6 +191,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 0,
       turnEnded: true,
+      kickoffReset: false,
     );
   }
 
@@ -202,6 +208,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -210,6 +217,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 
@@ -226,6 +234,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -234,6 +243,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 
@@ -250,6 +260,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -258,6 +269,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 
@@ -275,6 +287,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         gameOver: false,
         actionsRemaining: 0,
         turnEnded: false,
+        kickoffReset: false,
       );
     }
     return ActionResult(
@@ -283,6 +296,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       gameOver: false,
       actionsRemaining: 1,
       turnEnded: false,
+      kickoffReset: false,
     );
   }
 

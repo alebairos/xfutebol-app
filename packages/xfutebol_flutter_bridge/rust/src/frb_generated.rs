@@ -733,6 +733,7 @@ impl SseDecode for crate::api::ActionResult {
         let mut var_actionsRemaining = <u8>::sse_decode(deserializer);
         let mut var_goalScored = <Option<crate::api::Team>>::sse_decode(deserializer);
         let mut var_turnEnded = <bool>::sse_decode(deserializer);
+        let mut var_kickoffReset = <bool>::sse_decode(deserializer);
         return crate::api::ActionResult {
             success: var_success,
             message: var_message,
@@ -741,6 +742,7 @@ impl SseDecode for crate::api::ActionResult {
             actions_remaining: var_actionsRemaining,
             goal_scored: var_goalScored,
             turn_ended: var_turnEnded,
+            kickoff_reset: var_kickoffReset,
         };
     }
 }
@@ -1072,6 +1074,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::ActionResult {
             self.actions_remaining.into_into_dart().into_dart(),
             self.goal_scored.into_into_dart().into_dart(),
             self.turn_ended.into_into_dart().into_dart(),
+            self.kickoff_reset.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1273,6 +1276,7 @@ impl SseEncode for crate::api::ActionResult {
         <u8>::sse_encode(self.actions_remaining, serializer);
         <Option<crate::api::Team>>::sse_encode(self.goal_scored, serializer);
         <bool>::sse_encode(self.turn_ended, serializer);
+        <bool>::sse_encode(self.kickoff_reset, serializer);
     }
 }
 
@@ -1581,6 +1585,7 @@ mod io {
                 actions_remaining: self.actions_remaining.cst_decode(),
                 goal_scored: self.goal_scored.cst_decode(),
                 turn_ended: self.turn_ended.cst_decode(),
+                kickoff_reset: self.kickoff_reset.cst_decode(),
             }
         }
     }
@@ -1727,6 +1732,7 @@ mod io {
                 actions_remaining: Default::default(),
                 goal_scored: core::ptr::null_mut(),
                 turn_ended: Default::default(),
+                kickoff_reset: Default::default(),
             }
         }
     }
@@ -2130,6 +2136,7 @@ mod io {
         actions_remaining: u8,
         goal_scored: *mut i32,
         turn_ended: bool,
+        kickoff_reset: bool,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -2242,8 +2249,8 @@ mod web {
                 .unwrap();
             assert_eq!(
                 self_.length(),
-                7,
-                "Expected 7 elements, got {}",
+                8,
+                "Expected 8 elements, got {}",
                 self_.length()
             );
             crate::api::ActionResult {
@@ -2254,6 +2261,7 @@ mod web {
                 actions_remaining: self_.get(4).cst_decode(),
                 goal_scored: self_.get(5).cst_decode(),
                 turn_ended: self_.get(6).cst_decode(),
+                kickoff_reset: self_.get(7).cst_decode(),
             }
         }
     }

@@ -211,6 +211,9 @@ class ActionResult {
   /// Whether the turn ended after this action
   final bool turnEnded;
 
+  /// Whether ball was reset to center after a goal (kickoff)
+  final bool kickoffReset;
+
   const ActionResult({
     required this.success,
     required this.message,
@@ -219,6 +222,7 @@ class ActionResult {
     required this.actionsRemaining,
     this.goalScored,
     required this.turnEnded,
+    required this.kickoffReset,
   });
 
   @override
@@ -229,7 +233,8 @@ class ActionResult {
       winner.hashCode ^
       actionsRemaining.hashCode ^
       goalScored.hashCode ^
-      turnEnded.hashCode;
+      turnEnded.hashCode ^
+      kickoffReset.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -242,7 +247,8 @@ class ActionResult {
           winner == other.winner &&
           actionsRemaining == other.actionsRemaining &&
           goalScored == other.goalScored &&
-          turnEnded == other.turnEnded;
+          turnEnded == other.turnEnded &&
+          kickoffReset == other.kickoffReset;
 }
 
 /// Action types available in the game

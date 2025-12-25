@@ -244,6 +244,7 @@ abstract class XfutebolBridgeApiImplPlatform
       cst_encode_u_8(raw.actionsRemaining),
       cst_encode_opt_box_autoadd_team(raw.goalScored),
       cst_encode_bool(raw.turnEnded),
+      cst_encode_bool(raw.kickoffReset),
     ].jsify()!;
   }
 
