@@ -239,9 +239,10 @@ class GameController extends ChangeNotifier {
 
       try {
         // Get bot's action
+        // Use Medium difficulty so bot prioritizes interception (Easy = random moves)
         final botAction = await getBotAction(
           gameId: _gameId!,
-          difficulty: Difficulty.easy,
+          difficulty: Difficulty.medium,
         );
 
         if (botAction == null) {

@@ -176,41 +176,42 @@ class _GameOverOverlayState extends State<GameOverOverlay>
 
                   const SizedBox(height: 32),
 
-                  // Action buttons
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+                  // Action buttons - use Wrap to handle small screens
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
                     children: [
                       ElevatedButton.icon(
                         onPressed: widget.onNewGame,
-                        icon: const Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh, size: 18),
                         label: const Text('Play Again'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.amber,
                           foregroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
+                            horizontal: 16,
+                            vertical: 10,
                           ),
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
                       OutlinedButton.icon(
                         onPressed: widget.onMainMenu,
-                        icon: const Icon(Icons.home),
+                        icon: const Icon(Icons.home, size: 18),
                         label: const Text('Menu'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           side: const BorderSide(color: Colors.white54),
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
+                            horizontal: 16,
+                            vertical: 10,
                           ),
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
