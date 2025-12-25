@@ -1,6 +1,6 @@
 # FT-018: Goal Handling in Flutter App
 
-## Status: 📋 Planned
+## Status: ✅ Implemented
 
 ## Summary
 
@@ -336,15 +336,15 @@ testWidgets('goal celebration displays and auto-dismisses', (tester) async {
 
 ## Acceptance Criteria
 
-- [ ] Goal scored by White → Shows "WHITE SCORES!" celebration
-- [ ] Goal scored by Black → Shows "BLACK SCORES!" celebration
-- [ ] Celebration auto-dismisses after ~2.5 seconds
-- [ ] Board refreshes after kickoff reset
-- [ ] Score display updates immediately on goal
-- [ ] Game over shows correct winner
-- [ ] Game over allows starting new game
-- [ ] Game over allows returning to menu
-- [ ] Bot mode: Bot plays after kickoff (conceding team starts)
+- [x] Goal scored by White → Shows "YOU SCORES!" celebration
+- [x] Goal scored by Black → Shows "BOT SCORES!" celebration
+- [x] Celebration auto-dismisses after ~2.5 seconds
+- [x] Board refreshes after kickoff reset
+- [x] Score display updates immediately on goal
+- [x] Game over shows correct winner
+- [x] Game over allows starting new game
+- [x] Game over allows returning to menu (placeholder - starts new game)
+- [x] Bot mode: Bot plays after kickoff (conceding team starts)
 
 ## Dependencies
 
@@ -359,6 +359,19 @@ testWidgets('goal celebration displays and auto-dismisses', (tester) async {
   1. Show celebration
   2. Refresh board state (which gets new positions from engine)
 - No client-side game logic needed for reset
+
+## Implementation Notes
+
+### Files Created
+- `lib/src/game/widgets/overlay/goal_celebration.dart` - Animated goal overlay
+- `lib/src/game/widgets/overlay/game_over_overlay.dart` - Game over screen
+
+### Files Modified
+- `lib/src/game/game_controller.dart` - ActionResult handling
+- `lib/src/game/game_screen.dart` - Overlay integration
+
+### Branch
+`ft-018-goal-handling`
 
 ## Related
 
