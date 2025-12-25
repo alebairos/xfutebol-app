@@ -129,6 +129,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -136,6 +137,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock move executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 
@@ -151,6 +153,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -158,6 +161,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock pass executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 
@@ -173,6 +177,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -180,6 +185,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock shoot executed',
       gameOver: false,
       actionsRemaining: 0,
+      turnEnded: true,
     );
   }
 
@@ -195,6 +201,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -202,6 +209,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock intercept executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 
@@ -217,6 +225,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -224,6 +233,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock kick executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 
@@ -239,6 +249,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -246,6 +257,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock defend executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 
@@ -262,6 +274,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
         message: 'Game not found',
         gameOver: false,
         actionsRemaining: 0,
+        turnEnded: false,
       );
     }
     return ActionResult(
@@ -269,6 +282,7 @@ class MockXfutebolBridgeApi extends XfutebolBridgeApi {
       message: 'Mock push executed',
       gameOver: false,
       actionsRemaining: 1,
+      turnEnded: false,
     );
   }
 

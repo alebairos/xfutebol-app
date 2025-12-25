@@ -369,6 +369,8 @@ abstract class XfutebolBridgeApiImplPlatform
     wireObj.game_over = cst_encode_bool(apiObj.gameOver);
     wireObj.winner = cst_encode_opt_box_autoadd_team(apiObj.winner);
     wireObj.actions_remaining = cst_encode_u_8(apiObj.actionsRemaining);
+    wireObj.goal_scored = cst_encode_opt_box_autoadd_team(apiObj.goalScored);
+    wireObj.turn_ended = cst_encode_bool(apiObj.turnEnded);
   }
 
   @protected
@@ -1517,4 +1519,9 @@ final class wire_cst_action_result extends ffi.Struct {
 
   @ffi.Uint8()
   external int actions_remaining;
+
+  external ffi.Pointer<ffi.Int32> goal_scored;
+
+  @ffi.Bool()
+  external bool turn_ended;
 }

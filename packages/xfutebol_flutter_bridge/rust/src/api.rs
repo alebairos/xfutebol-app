@@ -101,6 +101,10 @@ pub struct ActionResult {
     pub game_over: bool,
     pub winner: Option<Team>,
     pub actions_remaining: u8,
+    /// Which team scored a goal (if any) - None means no goal
+    pub goal_scored: Option<Team>,
+    /// Whether the turn ended after this action
+    pub turn_ended: bool,
 }
 
 impl ActionResult {
@@ -111,6 +115,8 @@ impl ActionResult {
             game_over: false,
             winner: None,
             actions_remaining: 0,
+            goal_scored: None,
+            turn_ended: false,
         }
     }
     
@@ -121,6 +127,8 @@ impl ActionResult {
             game_over: outcome.game_over,
             winner: outcome.winner.map(|t| t.into()),
             actions_remaining: outcome.actions_remaining,
+            goal_scored: outcome.goal_scored.map(|t| t.into()),
+            turn_ended: outcome.turn_ended,
         }
     }
 }

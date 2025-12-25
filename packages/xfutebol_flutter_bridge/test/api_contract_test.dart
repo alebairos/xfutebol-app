@@ -210,24 +210,31 @@ void main() {
           message: 'Move executed',
           gameOver: false,
           actionsRemaining: 1,
+          turnEnded: false,
         );
         expect(result.success, isTrue);
         expect(result.message, equals('Move executed'));
         expect(result.gameOver, isFalse);
         expect(result.winner, isNull);
         expect(result.actionsRemaining, equals(1));
+        expect(result.goalScored, isNull);
+        expect(result.turnEnded, isFalse);
       });
 
-      test('can include winner', () {
+      test('can include winner and goal scored', () {
         final result = ActionResult(
           success: true,
           message: 'Goal scored!',
           gameOver: true,
           winner: Team.white,
           actionsRemaining: 0,
+          goalScored: Team.white,
+          turnEnded: true,
         );
         expect(result.gameOver, isTrue);
         expect(result.winner, equals(Team.white));
+        expect(result.goalScored, equals(Team.white));
+        expect(result.turnEnded, isTrue);
       });
 
       test('equality works for same values', () {
@@ -236,12 +243,14 @@ void main() {
           message: 'Test',
           gameOver: false,
           actionsRemaining: 2,
+          turnEnded: false,
         );
         final result2 = ActionResult(
           success: true,
           message: 'Test',
           gameOver: false,
           actionsRemaining: 2,
+          turnEnded: false,
         );
         expect(result1, equals(result2));
       });
@@ -252,12 +261,14 @@ void main() {
           message: 'Test',
           gameOver: false,
           actionsRemaining: 2,
+          turnEnded: false,
         );
         final result2 = ActionResult(
           success: false,
           message: 'Test',
           gameOver: false,
           actionsRemaining: 2,
+          turnEnded: false,
         );
         expect(result1, isNot(equals(result2)));
       });
@@ -268,12 +279,14 @@ void main() {
           message: 'Test',
           gameOver: false,
           actionsRemaining: 2,
+          turnEnded: false,
         );
         final result2 = ActionResult(
           success: true,
           message: 'Test',
           gameOver: false,
           actionsRemaining: 1,
+          turnEnded: false,
         );
         expect(result1, isNot(equals(result2)));
       });

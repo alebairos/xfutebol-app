@@ -74,7 +74,7 @@ class XfutebolBridge
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
-        stem: 'rust_lib_xfutebol_flutter_bridge',
+        stem: 'xfutebol_flutter_bridge',
         ioDirectory: 'rust/target/release/',
         webPrefix: 'pkg/',
       );
@@ -832,14 +832,16 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
   ActionResult dco_decode_action_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
     return ActionResult(
       success: dco_decode_bool(arr[0]),
       message: dco_decode_String(arr[1]),
       gameOver: dco_decode_bool(arr[2]),
       winner: dco_decode_opt_box_autoadd_team(arr[3]),
       actionsRemaining: dco_decode_u_8(arr[4]),
+      goalScored: dco_decode_opt_box_autoadd_team(arr[5]),
+      turnEnded: dco_decode_bool(arr[6]),
     );
   }
 
@@ -1081,12 +1083,16 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     var var_gameOver = sse_decode_bool(deserializer);
     var var_winner = sse_decode_opt_box_autoadd_team(deserializer);
     var var_actionsRemaining = sse_decode_u_8(deserializer);
+    var var_goalScored = sse_decode_opt_box_autoadd_team(deserializer);
+    var var_turnEnded = sse_decode_bool(deserializer);
     return ActionResult(
       success: var_success,
       message: var_message,
       gameOver: var_gameOver,
       winner: var_winner,
       actionsRemaining: var_actionsRemaining,
+      goalScored: var_goalScored,
+      turnEnded: var_turnEnded,
     );
   }
 
@@ -1442,6 +1448,8 @@ class XfutebolBridgeApiImpl extends XfutebolBridgeApiImplPlatform
     sse_encode_bool(self.gameOver, serializer);
     sse_encode_opt_box_autoadd_team(self.winner, serializer);
     sse_encode_u_8(self.actionsRemaining, serializer);
+    sse_encode_opt_box_autoadd_team(self.goalScored, serializer);
+    sse_encode_bool(self.turnEnded, serializer);
   }
 
   @protected

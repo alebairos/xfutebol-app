@@ -205,12 +205,20 @@ class ActionResult {
   final Team? winner;
   final int actionsRemaining;
 
+  /// Which team scored a goal (if any) - None means no goal
+  final Team? goalScored;
+
+  /// Whether the turn ended after this action
+  final bool turnEnded;
+
   const ActionResult({
     required this.success,
     required this.message,
     required this.gameOver,
     this.winner,
     required this.actionsRemaining,
+    this.goalScored,
+    required this.turnEnded,
   });
 
   @override
@@ -219,7 +227,9 @@ class ActionResult {
       message.hashCode ^
       gameOver.hashCode ^
       winner.hashCode ^
-      actionsRemaining.hashCode;
+      actionsRemaining.hashCode ^
+      goalScored.hashCode ^
+      turnEnded.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -230,7 +240,9 @@ class ActionResult {
           message == other.message &&
           gameOver == other.gameOver &&
           winner == other.winner &&
-          actionsRemaining == other.actionsRemaining;
+          actionsRemaining == other.actionsRemaining &&
+          goalScored == other.goalScored &&
+          turnEnded == other.turnEnded;
 }
 
 /// Action types available in the game
