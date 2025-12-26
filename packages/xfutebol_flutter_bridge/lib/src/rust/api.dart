@@ -7,7 +7,7 @@ import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `error`, `execute_path_action`, `from_outcome`, `get_legal_action_paths`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`
 
 /// Create a new game with the specified mode
 Future<String> newGame({required GameModeType mode}) =>
@@ -193,9 +193,71 @@ Future<bool> gameExists({required String gameId}) =>
 Future<bool> deleteGame({required String gameId}) =>
     XfutebolBridge.instance.api.crateApiDeleteGame(gameId: gameId);
 
+/// Get the current match state summary
+Future<MatchStateView?> getMatchState({required String gameId}) =>
+    XfutebolBridge.instance.api.crateApiGetMatchState(gameId: gameId);
+
+/// Get the complete action log for a game
+Future<List<ActionLogView>> getActionLog({required String gameId}) =>
+    XfutebolBridge.instance.api.crateApiGetActionLog(gameId: gameId);
+
+/// Get the last N actions from a game (for recent activity display)
+Future<List<ActionLogView>> getLastNActions({
+  required String gameId,
+  required int n,
+}) => XfutebolBridge.instance.api.crateApiGetLastNActions(gameId: gameId, n: n);
+
+/// Export the current board state as notation string (for debugging)
+Future<String?> exportBoardNotation({required String gameId}) =>
+    XfutebolBridge.instance.api.crateApiExportBoardNotation(gameId: gameId);
+
 /// Simple test function to verify bridge works
 Future<String> greet({required String name}) =>
     XfutebolBridge.instance.api.crateApiGreet(name: name);
+
+/// A single recorded action from the game log
+class ActionLogView {
+  final String? pieceId;
+  final Team? team;
+  final ActionType actionType;
+  final Position from;
+  final Position to;
+  final List<Position> path;
+  final BigInt timestampMs;
+
+  const ActionLogView({
+    this.pieceId,
+    this.team,
+    required this.actionType,
+    required this.from,
+    required this.to,
+    required this.path,
+    required this.timestampMs,
+  });
+
+  @override
+  int get hashCode =>
+      pieceId.hashCode ^
+      team.hashCode ^
+      actionType.hashCode ^
+      from.hashCode ^
+      to.hashCode ^
+      path.hashCode ^
+      timestampMs.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ActionLogView &&
+          runtimeType == other.runtimeType &&
+          pieceId == other.pieceId &&
+          team == other.team &&
+          actionType == other.actionType &&
+          from == other.from &&
+          to == other.to &&
+          path == other.path &&
+          timestampMs == other.timestampMs;
+}
 
 /// Result of an action
 class ActionResult {
@@ -328,6 +390,62 @@ enum Difficulty { easy, medium }
 
 /// Game mode options
 enum GameModeType { quickMatch, standardMatch, goldenGoal }
+
+/// Match state summary with action log
+class MatchStateView {
+  final String gameId;
+  final GameModeType mode;
+  final int currentTurn;
+  final int actionsRemaining;
+  final int scoreWhite;
+  final int scoreBlack;
+  final bool isFinished;
+  final Team? winner;
+  final int actionCount;
+  final String boardNotation;
+
+  const MatchStateView({
+    required this.gameId,
+    required this.mode,
+    required this.currentTurn,
+    required this.actionsRemaining,
+    required this.scoreWhite,
+    required this.scoreBlack,
+    required this.isFinished,
+    this.winner,
+    required this.actionCount,
+    required this.boardNotation,
+  });
+
+  @override
+  int get hashCode =>
+      gameId.hashCode ^
+      mode.hashCode ^
+      currentTurn.hashCode ^
+      actionsRemaining.hashCode ^
+      scoreWhite.hashCode ^
+      scoreBlack.hashCode ^
+      isFinished.hashCode ^
+      winner.hashCode ^
+      actionCount.hashCode ^
+      boardNotation.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MatchStateView &&
+          runtimeType == other.runtimeType &&
+          gameId == other.gameId &&
+          mode == other.mode &&
+          currentTurn == other.currentTurn &&
+          actionsRemaining == other.actionsRemaining &&
+          scoreWhite == other.scoreWhite &&
+          scoreBlack == other.scoreBlack &&
+          isFinished == other.isFinished &&
+          winner == other.winner &&
+          actionCount == other.actionCount &&
+          boardNotation == other.boardNotation;
+}
 
 /// Piece roles
 enum PieceRole { goalkeeper, defender, midfielder, attacker }

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:xfutebol_flutter_bridge/xfutebol_flutter_bridge.dart';
 
+import 'services/match_logger.dart';
+
 /// Controller for game state and bridge interactions.
 /// 
 /// Manages:
@@ -8,6 +10,7 @@ import 'package:xfutebol_flutter_bridge/xfutebol_flutter_bridge.dart';
 /// - Piece selection and valid moves
 /// - Action execution (move, pass, shoot, etc.)
 /// - Bot turns
+/// - Goal detection and celebration
 class GameController extends ChangeNotifier {
   GameController();
 
@@ -41,26 +44,56 @@ class GameController extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  /// Game over state
-  bool get isGameOver => _board != null && 
-      (_board!.whiteScore >= 3 || _board!.blackScore >= 3);
+  /// Team that just scored (null if no recent goal)
+  /// This is set when a goal is scored and cleared after celebration
+  Team? _goalScoredBy;
+  Team? get goalScoredBy => _goalScoredBy;
+
+  /// Whether a kickoff reset just occurred
+  bool _kickoffReset = false;
+  bool get kickoffReset => _kickoffReset;
+
+  /// Game over state - uses engine's gameOver flag from last action
+  bool _isGameOver = false;
+  bool get isGameOver => _isGameOver || 
+      (_board != null && (_board!.whiteScore >= 3 || _board!.blackScore >= 3));
 
   /// Winner (null if game not over)
+  Team? _winner;
   Team? get winner {
+    if (_winner != null) return _winner;
     if (_board == null) return null;
     if (_board!.whiteScore >= 3) return Team.white;
     if (_board!.blackScore >= 3) return Team.black;
     return null;
   }
 
+  /// Match logger for debugging
+  MatchLogger? _logger;
+  MatchLogger? get logger => _logger;
+
   /// Start a new game
   Future<void> startNewGame() async {
     _isLoading = true;
     _errorMessage = null;
+    _isGameOver = false;
+    _winner = null;
+    _goalScoredBy = null;
+    _kickoffReset = false;
     notifyListeners();
 
     try {
+      _logger?.logBridgeStart('newGame');
       _gameId = await newGame(mode: GameModeType.quickMatch);
+      
+      // Initialize logger for this match
+      _logger = MatchLogger(_gameId!);
+      _logger!.logUI(UIEventType.gameStarted, 'New game started', data: {
+        'gameId': _gameId,
+        'mode': 'quickMatch',
+      });
+      _logger?.logBridgeComplete('newGame', result: {'gameId': _gameId});
+      
       await _refreshBoard();
       _selectedPieceId = null;
       _validMoves = [];
@@ -68,15 +101,38 @@ class GameController extends ChangeNotifier {
       _lastMoveTo = null;
     } catch (e) {
       _errorMessage = 'Failed to start game: $e';
+      _logger?.logError('Failed to start game', error: e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+  /// Clear goal celebration state and continue game
+  /// Called by UI after celebration animation completes
+  Future<void> clearGoalCelebration() async {
+    _goalScoredBy = null;
+    _kickoffReset = false;
+    
+    // CRITICAL: Refresh board state after kickoff reset
+    // The engine has reset the board, we need fresh data
+    await _refreshBoard();
+    notifyListeners();
+
+    // Continue bot turn if it's bot's turn after kickoff
+    if (!isGameOver && _board?.currentTurn == Team.black) {
+      await _handleBotTurn();
+    }
+  }
+
   /// Handle square tap - select piece or execute move
   Future<void> handleSquareTap(Position position) async {
     if (_gameId == null || _board == null || isGameOver) return;
+
+    _logger?.logUI(UIEventType.squareTapped, 'position', data: {
+      'row': position.row,
+      'col': position.col,
+    });
 
     // Check if tapped on a piece
     final tappedPiece = _board!.pieces.where(
@@ -105,6 +161,13 @@ class GameController extends ChangeNotifier {
   Future<void> _handlePieceTap(PieceView piece) async {
     if (_gameId == null || _board == null) return;
 
+    _logger?.logUI(UIEventType.pieceTapped, piece.id, data: {
+      'team': piece.team.name,
+      'role': piece.role.name,
+      'position': '(${piece.position.row},${piece.position.col})',
+      'hasBall': piece.hasBall,
+    });
+
     // Can only select own pieces on your turn
     if (piece.team != _board!.currentTurn) {
       _clearSelection();
@@ -125,10 +188,17 @@ class GameController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      _logger?.logBridgeStart('getLegalMoves');
       _validMoves = await getLegalMoves(gameId: _gameId!, pieceId: piece.id);
+      _logger?.logBridgeComplete('getLegalMoves', result: {'moveCount': _validMoves.length});
+      _logger?.logUI(UIEventType.validMovesComputed, 'moves', data: {
+        'count': _validMoves.length,
+        'moves': _validMoves.map((m) => '(${m.row},${m.col})').toList(),
+      });
     } catch (e) {
       _errorMessage = 'Failed to get moves: $e';
       _validMoves = [];
+      _logger?.logBridgeFailed('getLegalMoves', e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -151,44 +221,91 @@ class GameController extends ChangeNotifier {
       _lastMoveFrom = selectedPiece.position;
       _lastMoveTo = target;
 
-      // Execute the move
-      await executeMove(
+      _logger?.logBridgeStart('executeMove');
+      // Execute the move and handle result
+      final result = await executeMove(
         gameId: _gameId!,
         pieceId: _selectedPieceId!,
         to: target,
       );
+      _logger?.logBridgeComplete('executeMove', result: {
+        'success': result.success,
+        'message': result.message,
+        'goalScored': result.goalScored?.name,
+      });
 
-      await _refreshBoard();
+      // Sync engine log after action
+      await _logger?.syncFromEngine();
+
+      await _handleActionResult(result);
       _clearSelection();
 
-      // Handle bot turn if needed
-      await _handleBotTurn();
+      // Handle bot turn if needed (after goal celebration)
+      if (_goalScoredBy == null && !isGameOver) {
+        await _handleBotTurn();
+      }
     } catch (e) {
       _errorMessage = 'Move failed: $e';
+      _logger?.logBridgeFailed('executeMove', e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+  /// Handle action result - check for goals and game over
+  Future<void> _handleActionResult(ActionResult result) async {
+    if (!result.success) {
+      _errorMessage = result.message;
+      _logger?.logError('Action failed', error: result.message);
+      return;
+    }
+
+    // Check for goal scored
+    if (result.goalScored != null) {
+      _goalScoredBy = result.goalScored;
+      _kickoffReset = result.kickoffReset;
+      _logger?.logUI(UIEventType.goalScored, result.goalScored!.name, data: {
+        'team': result.goalScored!.name,
+        'kickoffReset': result.kickoffReset,
+      });
+      notifyListeners();
+      // UI will show celebration and call clearGoalCelebration() when done
+    }
+
+    // Check for game over
+    if (result.gameOver) {
+      _isGameOver = true;
+      _winner = result.winner;
+    }
+
+    // Refresh board state
+    await _refreshBoard();
+  }
+
   /// Handle bot turn (if it's black's turn)
   Future<void> _handleBotTurn() async {
     if (_gameId == null || _board == null || isGameOver) return;
 
+    int consecutiveErrors = 0;
+    const maxErrors = 3; // Stop after 3 consecutive failures
+
     // Keep executing bot actions while it's black's turn
-    while (_board!.currentTurn == Team.black && !isGameOver) {
+    while (_board!.currentTurn == Team.black && !isGameOver && _goalScoredBy == null) {
       // Small delay to show the bot is "thinking"
       await Future.delayed(const Duration(milliseconds: 500));
 
       try {
         // Get bot's action
+        // Use Medium difficulty so bot prioritizes interception (Easy = random moves)
         final botAction = await getBotAction(
           gameId: _gameId!,
-          difficulty: Difficulty.easy,
+          difficulty: Difficulty.medium,
         );
 
         if (botAction == null) {
           // Bot has no valid action, end turn
+          _logger?.logUI(UIEventType.error, 'Bot has no valid action', data: {'reason': 'null action'});
           break;
         }
 
@@ -202,74 +319,99 @@ class GameController extends ChangeNotifier {
         }
 
         // Execute the action based on type
-        await _executeBotAction(botAction);
-
-        await _refreshBoard();
-        notifyListeners();
+        final result = await _executeBotAction(botAction);
+        
+        if (result != null) {
+          // Check if action failed
+          if (!result.success) {
+            consecutiveErrors++;
+            _logger?.logError('Bot action failed', error: result.message);
+            
+            if (consecutiveErrors >= maxErrors) {
+              _logger?.logError('Bot loop stopped', error: 'Too many consecutive errors ($maxErrors)');
+              break;
+            }
+            
+            // Refresh board and retry
+            await _refreshBoard();
+            continue;
+          }
+          
+          // Success - reset error counter
+          consecutiveErrors = 0;
+          
+          await _handleActionResult(result);
+          notifyListeners();
+          
+          // Stop bot loop if goal scored (let celebration play)
+          if (_goalScoredBy != null || isGameOver) {
+            break;
+          }
+        }
       } catch (e) {
+        consecutiveErrors++;
         _errorMessage = 'Bot move failed: $e';
-        break;
+        _logger?.logError('Bot move exception', error: e.toString());
+        
+        if (consecutiveErrors >= maxErrors) {
+          break;
+        }
       }
     }
   }
 
-  /// Execute a bot action
-  Future<void> _executeBotAction(BotAction action) async {
+  /// Execute a bot action and return the result
+  Future<ActionResult?> _executeBotAction(BotAction action) async {
     switch (action.actionType) {
       case ActionType.move:
         if (action.path.isNotEmpty) {
-          await executeMove(
+          return executeMove(
             gameId: _gameId!,
             pieceId: action.pieceId,
             to: action.path.last,
           );
         }
-        break;
+        return null;
       case ActionType.pass:
-        await executePass(
+        return executePass(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.shoot:
-        await executeShoot(
+        return executeShoot(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.intercept:
-        await executeIntercept(
+        return executeIntercept(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.kick:
-        await executeKick(
+        return executeKick(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.defend:
-        await executeDefend(
+        return executeDefend(
           gameId: _gameId!,
           pieceId: action.pieceId,
           path: action.path,
         );
-        break;
       case ActionType.push:
         if (action.path.length >= 2) {
-          await executePush(
+          return executePush(
             gameId: _gameId!,
             pieceId: action.pieceId,
             target: action.path[0],
             destination: action.path[1],
           );
         }
-        break;
+        return null;
     }
   }
 
@@ -291,8 +433,25 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Export match log to file
+  Future<void> exportLog() async {
+    if (_logger != null) {
+      _logger!.logUI(UIEventType.gameEnded, 'Game ended', data: {
+        'winner': winner?.name,
+        'scoreWhite': _board?.whiteScore,
+        'scoreBlack': _board?.blackScore,
+      });
+      await _logger!.exportToFile();
+    }
+  }
+
   @override
   void dispose() {
+    // Export log before cleanup
+    if (_logger != null) {
+      exportLog();
+    }
+    
     // Clean up game if needed
     if (_gameId != null) {
       deleteGame(gameId: _gameId!);

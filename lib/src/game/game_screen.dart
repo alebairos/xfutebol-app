@@ -4,6 +4,8 @@ import 'package:xfutebol_flutter_bridge/xfutebol_flutter_bridge.dart';
 import 'game_controller.dart';
 import 'widgets/board/board_settings.dart';
 import 'widgets/board/xfutebol_board.dart';
+import 'widgets/overlay/goal_celebration.dart';
+import 'widgets/overlay/game_over_overlay.dart';
 
 /// Main game screen.
 /// 
@@ -32,11 +34,6 @@ class _GameScreenState extends State<GameScreen> {
   void _onControllerChanged() {
     setState(() {});
 
-    // Show win dialog if game over
-    if (_controller.isGameOver && _controller.winner != null) {
-      _showWinDialog();
-    }
-
     // Show error snackbar if error
     if (_controller.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,52 +51,6 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void _showWinDialog() {
-    final winner = _controller.winner!;
-    final isPlayerWin = winner == Team.white;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          isPlayerWin ? '🎉 Victory!' : '😔 Defeat',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 28,
-            color: isPlayerWin ? Colors.green.shade700 : Colors.red.shade700,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              isPlayerWin ? 'You won!' : 'The bot won!',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '${_controller.board!.whiteScore} - ${_controller.board!.blackScore}',
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _controller.startNewGame();
-            },
-            child: const Text('Play Again'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
@@ -114,32 +65,59 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF1B5E20), // Dark green background
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            // Score HUD
-            _ScoreHud(board: board),
+            // Main game content
+            Column(
+              children: [
+                // Score HUD
+                _ScoreHud(board: board),
 
-            // Board
-            Expanded(
-              child: Center(
-                child: _controller.isLoading && board == null
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : board != null
-                        ? _buildBoard(board)
-                        : const Text(
-                            'Failed to load game',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                // Board
+                Expanded(
+                  child: Center(
+                    child: _controller.isLoading && board == null
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : board != null
+                            ? _buildBoard(board)
+                            : const Text(
+                                'Failed to load game',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                  ),
+                ),
+
+                // Turn indicator and actions
+                _TurnIndicator(
+                  board: board,
+                  selectedPieceId: _controller.selectedPieceId,
+                  isLoading: _controller.isLoading,
+                  onNewGame: _controller.startNewGame,
+                ),
+              ],
+            ),
+
+            // Goal celebration overlay
+            if (_controller.goalScoredBy != null)
+              GoalCelebration(
+                scoringTeam: _controller.goalScoredBy!,
+                onComplete: _controller.clearGoalCelebration,
               ),
-            ),
 
-            // Turn indicator and actions
-            _TurnIndicator(
-              board: board,
-              selectedPieceId: _controller.selectedPieceId,
-              isLoading: _controller.isLoading,
-              onNewGame: _controller.startNewGame,
-            ),
+            // Game over overlay
+            if (_controller.isGameOver && 
+                _controller.winner != null && 
+                _controller.goalScoredBy == null)
+              GameOverOverlay(
+                winner: _controller.winner!,
+                whiteScore: board?.whiteScore ?? 0,
+                blackScore: board?.blackScore ?? 0,
+                onNewGame: _controller.startNewGame,
+                onMainMenu: () {
+                  // TODO: Navigate to main menu when implemented
+                  _controller.startNewGame();
+                },
+              ),
           ],
         ),
       ),

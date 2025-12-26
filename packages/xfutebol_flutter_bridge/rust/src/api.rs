@@ -19,6 +19,8 @@ use xfutebol_engine::{
     Action as EngineAction,
     ActionOutcome,
     GameError,
+    // History types - ActionLog is what GameMatch exposes
+    ActionLog,
 };
 
 // =============================================================================
@@ -176,6 +178,39 @@ pub struct PositionPath {
 }
 
 // =============================================================================
+// Match History Types (FT-020)
+// =============================================================================
+
+/// A single recorded action from the game log
+#[frb]
+#[derive(Debug, Clone)]
+pub struct ActionLogView {
+    pub piece_id: Option<String>,
+    pub team: Option<Team>,
+    pub action_type: ActionType,
+    pub from: Position,
+    pub to: Position,
+    pub path: Vec<Position>,
+    pub timestamp_ms: u64,  // Milliseconds since epoch
+}
+
+/// Match state summary with action log
+#[frb]
+#[derive(Debug, Clone)]
+pub struct MatchStateView {
+    pub game_id: String,
+    pub mode: GameModeType,
+    pub current_turn: u32,
+    pub actions_remaining: u8,
+    pub score_white: u8,
+    pub score_black: u8,
+    pub is_finished: bool,
+    pub winner: Option<Team>,
+    pub action_count: u32,
+    pub board_notation: String,  // Current board state as notation
+}
+
+// =============================================================================
 // Type Conversions
 // =============================================================================
 
@@ -251,6 +286,25 @@ impl From<EngineAction> for ActionType {
             EngineAction::KICK => ActionType::Kick,
             EngineAction::DEFEND => ActionType::Defend,
             EngineAction::PUSH => ActionType::Push,
+        }
+    }
+}
+
+// History type conversions
+
+impl From<&ActionLog> for ActionLogView {
+    fn from(log: &ActionLog) -> Self {
+        ActionLogView {
+            piece_id: log.piece_id.map(|id| format!("P{}", id)),
+            team: log.team.map(|t| t.into()),
+            action_type: log.action.into(),
+            from: Position::from(log.from),
+            to: Position::from(log.to),
+            path: log.path.iter().map(|t| Position::from(*t)).collect(),
+            timestamp_ms: log.timestamp
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_millis() as u64)
+                .unwrap_or(0),
         }
     }
 }
@@ -635,6 +689,71 @@ pub fn game_exists(game_id: String) -> bool {
 pub fn delete_game(game_id: String) -> bool {
     let mut games = GAMES.lock().unwrap();
     games.remove(&game_id).is_some()
+}
+
+// =============================================================================
+// Match History Functions (FT-020)
+// =============================================================================
+
+/// Get the current match state summary
+#[frb]
+pub fn get_match_state(game_id: String) -> Option<MatchStateView> {
+    let games = GAMES.lock().unwrap();
+    let game = games.get(&game_id)?;
+    
+    // Determine mode type from mode name
+    let mode_type = if game.mode().name.contains("Quick") {
+        GameModeType::QuickMatch
+    } else if game.mode().name.contains("Golden") {
+        GameModeType::GoldenGoal
+    } else {
+        GameModeType::StandardMatch
+    };
+    
+    Some(MatchStateView {
+        game_id: game_id.clone(),
+        mode: mode_type,
+        current_turn: game.turn_number(),
+        actions_remaining: game.actions_remaining(),
+        score_white: game.score().0,
+        score_black: game.score().1,
+        is_finished: game.is_over(),
+        winner: game.winner().map(Into::into),
+        action_count: game.action_log().len() as u32,
+        board_notation: game.board().to_notation_v3(),
+    })
+}
+
+/// Get the complete action log for a game
+#[frb]
+pub fn get_action_log(game_id: String) -> Vec<ActionLogView> {
+    let games = GAMES.lock().unwrap();
+    match games.get(&game_id) {
+        Some(game) => game.action_log().iter().map(ActionLogView::from).collect(),
+        None => Vec::new(),
+    }
+}
+
+/// Get the last N actions from a game (for recent activity display)
+#[frb]
+pub fn get_last_n_actions(game_id: String, n: u32) -> Vec<ActionLogView> {
+    let games = GAMES.lock().unwrap();
+    match games.get(&game_id) {
+        Some(game) => {
+            let actions = game.action_log();
+            let start = actions.len().saturating_sub(n as usize);
+            actions[start..].iter().map(ActionLogView::from).collect()
+        }
+        None => Vec::new(),
+    }
+}
+
+/// Export the current board state as notation string (for debugging)
+#[frb]
+pub fn export_board_notation(game_id: String) -> Option<String> {
+    let games = GAMES.lock().unwrap();
+    let game = games.get(&game_id)?;
+    Some(game.board().to_notation_v3())
 }
 
 /// Simple test function to verify bridge works
