@@ -113,6 +113,10 @@ class GameController extends ChangeNotifier {
   Future<void> clearGoalCelebration() async {
     _goalScoredBy = null;
     _kickoffReset = false;
+    
+    // CRITICAL: Refresh board state after kickoff reset
+    // The engine has reset the board, we need fresh data
+    await _refreshBoard();
     notifyListeners();
 
     // Continue bot turn if it's bot's turn after kickoff
@@ -283,6 +287,9 @@ class GameController extends ChangeNotifier {
   Future<void> _handleBotTurn() async {
     if (_gameId == null || _board == null || isGameOver) return;
 
+    int consecutiveErrors = 0;
+    const maxErrors = 3; // Stop after 3 consecutive failures
+
     // Keep executing bot actions while it's black's turn
     while (_board!.currentTurn == Team.black && !isGameOver && _goalScoredBy == null) {
       // Small delay to show the bot is "thinking"
@@ -298,6 +305,7 @@ class GameController extends ChangeNotifier {
 
         if (botAction == null) {
           // Bot has no valid action, end turn
+          _logger?.logUI(UIEventType.error, 'Bot has no valid action', data: {'reason': 'null action'});
           break;
         }
 
@@ -314,6 +322,24 @@ class GameController extends ChangeNotifier {
         final result = await _executeBotAction(botAction);
         
         if (result != null) {
+          // Check if action failed
+          if (!result.success) {
+            consecutiveErrors++;
+            _logger?.logError('Bot action failed', error: result.message);
+            
+            if (consecutiveErrors >= maxErrors) {
+              _logger?.logError('Bot loop stopped', error: 'Too many consecutive errors ($maxErrors)');
+              break;
+            }
+            
+            // Refresh board and retry
+            await _refreshBoard();
+            continue;
+          }
+          
+          // Success - reset error counter
+          consecutiveErrors = 0;
+          
           await _handleActionResult(result);
           notifyListeners();
           
@@ -323,8 +349,13 @@ class GameController extends ChangeNotifier {
           }
         }
       } catch (e) {
+        consecutiveErrors++;
         _errorMessage = 'Bot move failed: $e';
-        break;
+        _logger?.logError('Bot move exception', error: e.toString());
+        
+        if (consecutiveErrors >= maxErrors) {
+          break;
+        }
       }
     }
   }
